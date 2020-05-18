@@ -1,3 +1,10 @@
+<?php 
+ob_start();
+session_start();
+ if(isset($_SESSION["name"])){
+    header('Location: index.php');
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -246,12 +253,7 @@
 										<input id="med_passe" name="med_passe" type="password" class="form-control" required="" placeholder="">
 									</div>
                                 <button type="submit" class="btn btn-primary">S'inscrire</button>
-                            </form>
-                                <?php
-                            if($ready) echo "c'est bon ";
-                            else echo "données erronés";
-                            ?>
-							
+                            </form>			
 						</div>
 					</div>
 				</section>

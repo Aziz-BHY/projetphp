@@ -162,8 +162,8 @@ session_start();
                                         </div>
                                         <ol class="breadcrumb">
                                             <li><a href="index.php">Acceuil</a></h2></li>
-                                              <li><a href="forum.php">Forum & questions</a></li>
-                                              <li class="active"><a href="f_seconnecter.php">Se Connecter</a> </li>
+                                              <li><a href="forum.php">Forum & Questions</a></li>
+                                              <li class="active"><a href="f_sinscrire.php">S'inscrire</a> </li>
                                         </ol>
                                            
 									</div>
@@ -178,16 +178,23 @@ session_start();
 
 						<div class="row">
                             <form>
-                                <div class="form-group">
-                                    <label for="f_phone">Numéro de téléphone</label>
-                                    <input id="f_phone" name="f_phone" type="text" class="form-control" required="" placeholder="">
-                                </div>
-                                <div class="form-group">
-                                    <label for="f_password">Mot de passe</label>
-                                    <input id="f_password" name="f_password" type="password" class="form-control" required="" placeholder="">
-                                </div>
-
-                                <button type="submit" class="btn btn-primary">Se connecter</button>
+                                        <div class="form-group">
+                                            <label for="f_nom"> Nom & Prénom </label>
+                                            <input id="f_nom" name="f_nom" type="text" class="form-control" required="" placeholder="">
+                                        </div>
+                                    <div class="form-group">
+                                        <label for="f_tel">Numéro de Téléphone</label>
+                                        <input id="f_tel" name="f_tel" type="tel" class="form-control" required="" placeholder="">
+                                    </div>
+										<div class="form-group">
+										<label for="f_mail">E-mail</label>
+										<input id="f_mail" name="f_mail" type="email" class="form-control" required="" placeholder="">
+                                
+									<div class="form-group">
+										<label for="f_pass">Mot de passe</label>
+										<input id="f_pass" name="f_pass" type="password" class="form-control" required="" placeholder="">
+									</div>
+                                <button type="submit" class="btn btn-primary">S'inscrire</button>
                             </form>
 
 							
@@ -204,7 +211,6 @@ session_start();
 			        		</div>
 			        	</div><!-- /.container -->
 			        </footer>
-<!-- copyright-section end -->
 			        <!-- copyright-section end -->
 				</div> <!-- .st-content -->
     		</div> <!-- .st-pusher -->

@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+<?php
+session_start();
+?><!DOCTYPE html>
 <html lang="en">
 
 	<head>
@@ -112,7 +114,8 @@
                                         <li class="active"><a href="index.php">Acceuil <span class="fa "></span></a>
                                             
                                         </li>
-                                    
+                                        <?php if(!isset($_SESSION["name"])):
+                                        ?>
                                         <li class="dropdown"><a href="espacemedecins.php">Espace Médecins <span class="fa fa-angle-down"></span></a>
                                             <div class="submenu-wrapper">
                                                 <div class="submenu-inner">
@@ -136,7 +139,23 @@
                                                 </div>
                                             </div>
                                         </li>
-                                       
+                                       <?php endif;
+                                        $var = "";
+                                        if($_SESSION["type"] == "doctor") $var = "Dr ";
+                                        if(isset($_SESSION["name"])): 
+                                        ?>
+                                        <li class="dropdown"><a href=""><?php echo "bonjour ".$var.$_SESSION["name"]; ?><span class="fa fa-angle-down"></span></a>
+                                            <div class="submenu-wrapper">
+                                                <div class="submenu-inner">
+                                                    <ul class="dropdown-menu">
+                                                    	<li><a href=".php">visiter profil </a></li>
+                                                        <li><a href="deconnecter.php">se déconnecter</a></li>
+                
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <?php endif;?>
                                         <!-- /Pages -->
 										<!-- Blog -->
                                         <li class="dropdown"><a href="guide.php">Guide Covid-19 <span class="fa"></span></a>

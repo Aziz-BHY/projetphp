@@ -1,3 +1,10 @@
+<?php 
+ob_start();
+session_start();
+ if(isset($_SESSION["name"])){
+    header('Location: index.php');
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -170,10 +177,10 @@
                     <div class="container">	
 
 						<div class="row">
-                            <form>
+                            <form method=post action="med_seconnecter.php">
                                 <div class="form-group">
-                                    <label for="med_phone">Numéro de téléphone</label>
-                                    <input id="med_phone" name="med_phone" type="text" class="form-control" required="" placeholder="">
+                                    <label for="med_cin">CIN</label>
+                                    <input id="med_cin" name="med_cin" type="text" class="form-control" required="" placeholder="">
                                 </div>
                                 <div class="form-group">
                                     <label for="med_password">Mot de passe</label>
@@ -183,7 +190,27 @@
                                 <button type="submit" class="btn btn-primary">Se connecter</button>
                             </form>
 
-							
+							<?php 
+                            if(isset($_POST)){
+                                 $servername = "localhost";
+                                $username = "root";
+                                $password = "MyNewPass";
+                                $conn = new mysqli($servername, $username, $password);
+                                if ($conn->connect_error) {
+                                    die("Connection failed: " . $conn->connect_error);
+                                }
+                                $req= "SELECT * FROM projetphp.doctor where CIN = ".$_POST["med_cin"]." and password = '".$_POST["med_password"]."';";
+                                $result = $conn->query($req);
+                                if ($result->num_rows == 1){
+                                    $row = $result->fetch_assoc();
+                                    $_SESSION["id"] = $row["CIN"];
+                                    $_SESSION["name"] = $row["name"];
+                                    $_SESSION["type"] = "doctor";
+                                    header('Location: index.php');
+                                    }
+                            }
+                             ob_end_flush();
+                            ?>
 						</div>
 					</div>
 				</section>

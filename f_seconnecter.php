@@ -4,6 +4,7 @@ session_start();
  if(isset($_SESSION["name"])){
     header('Location: index.php');
 }
+error_reporting(0);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -177,10 +178,10 @@ session_start();
                     <div class="container">	
 
 						<div class="row">
-                            <form>
+                            <form  method=post action="f_seconnecter.php">
                                 <div class="form-group">
-                                    <label for="f_phone">Numéro de téléphone</label>
-                                    <input id="f_phone" name="f_phone" type="text" class="form-control" required="" placeholder="">
+                                    <label for="f_mail">E-Mail</label>
+                                    <input id="f_mail" name="f_mail" type="text" class="form-control" required="" placeholder="">
                                 </div>
                                 <div class="form-group">
                                     <label for="f_password">Mot de passe</label>
@@ -189,7 +190,26 @@ session_start();
 
                                 <button type="submit" class="btn btn-primary">Se connecter</button>
                             </form>
-
+                            <?php 
+                            if(isset($_POST)){
+                                 $servername = "localhost";
+                                $username = "root";
+                                $password = "MyNewPass";
+                                $conn = new mysqli($servername, $username, $password);
+                                if ($conn->connect_error) {
+                                    die("Connection failed: " . $conn->connect_error);
+                                }
+                                $req= "SELECT * FROM projetphp.visiteur where E_mail = '".$_POST["f_mail"]."' and password = '".$_POST["f_password"]."';";
+                                $result = $conn->query($req);
+                                if ($result->num_rows == 1){
+                                    $row = $result->fetch_assoc();
+                                    $_SESSION["name"] = $row["nom"];
+                                    $_SESSION["type"] = "visiteur";
+                                    header('Location: index.php');
+                                }
+                            }
+                             ob_end_flush();
+                            ?>
 							
 						</div>
 					</div>

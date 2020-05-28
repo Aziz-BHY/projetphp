@@ -4,6 +4,7 @@ session_start();
  if(isset($_SESSION["name"])){
     header('Location: index.php');
 }
+error_reporting(0);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -203,11 +204,15 @@ session_start();
                                 $result = $conn->query($req);
                                 if ($result->num_rows == 1){
                                     $row = $result->fetch_assoc();
-                                    $_SESSION["id"] = $row["CIN"];
-                                    $_SESSION["name"] = $row["name"];
+                                    if($row["accepted"] == "en attente"){
+                                        echo "votre demande d'adition n'a pas été accépté encore";
+                                    }
+                                   else{ $_SESSION["id"] = $row["CIN"];
+                                    $_SESSION["name"] = $row["nom"];
                                     $_SESSION["type"] = "doctor";
                                     header('Location: index.php');
                                     }
+                                }
                             }
                              ob_end_flush();
                             ?>

@@ -4,6 +4,7 @@ session_start();
  if(isset($_SESSION["name"])){
     header('Location: index.php');
 }
+error_reporting(0);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -67,7 +68,7 @@ session_start();
                 }
             }
             if($ready)
-            insert("'".$_POST["med_nom"]."',".$_POST["med_CIN"].",'".$_POST["med_naissance"]."',".$_POST["med_ID"].",'".$_POST["med_mail"]."','".$_POST["med_hopital"]."','".$_POST["med_service"]."','".$_POST["med_passe"]."',".$_POST["med_tel"], "doctor");
+            insert("'".$_POST["med_nom"]."','".$_POST["med_prenom"]."','".$_POST["med_CIN"]."','".$_POST["med_naissance"]."','".$_POST["med_ID"]."','".$_POST["med_tel"]."','".$_POST["med_mail"]."','".$_POST["med_hopital"]."','".$_POST["med_service"]."','".$_POST["med_passe"]."','en attente'", "doctor");
         }
 
         ?>
@@ -194,13 +195,20 @@ session_start();
 
 						<div class="row">
                             <form  method=post action="med_sinscrire.php">
-								<div class="col-md-8">
+                                  <div class="row">
+								<div class="col-md-6">
 									<div class="form-group">
-										<label for="med_nom"> Nom & Prénom </label>
+										<label for="med_nom"> Nom </label>
 										<input id="med_nom" name="med_nom" type="text" class="form-control" required="" placeholder="">
 									</div>
 								</div>
-								
+                                <div class="col-md-6">
+									<div class="form-group">
+										<label for="med_prenom"> Prénom </label>
+										<input id="med_prenom" name="med_prenom" type="text" class="form-control" required="" placeholder="">
+									</div>
+								</div>
+                                </div>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">

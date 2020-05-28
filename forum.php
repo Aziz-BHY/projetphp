@@ -1,3 +1,7 @@
+<?php
+session_start();
+error_reporting(0);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -108,29 +112,48 @@
 										  
 									  </li>
 								  
-									  <li class="dropdown"><a href="espacemedecins.php">Espace Médecins <span class="fa fa-angle-down"></span></a>
-										  <div class="submenu-wrapper">
-											  <div class="submenu-inner">
-												  <ul class="dropdown-menu">
-													  <li><a href="med_seconnecter.php">Se Connecter </a></li>
-													  <li><a href="med_sinscrire.php">Créer un compte</a></li>
-													  
-												  </ul>
-											  </div>
-										  </div>
-									  </li>
-									  <li class="dropdown"><a href="forum.php">Forum & Questions <span class="fa fa-angle-down"></span></a>
-										  <!-- submenu-wrapper -->
-										  <div class="submenu-wrapper">
-											  <div class="submenu-inner">
-												  <ul class="dropdown-menu">
-													  <li><a href="f_seconnecter.php">Se Connecter </a></li>
-													  <li><a href="f_sinscrire.php">Créer un compte</a></li>
-													  
-												  </ul>
-											  </div>
-										  </div>
-									  </li>
+									  <?php if(!isset($_SESSION["name"])):
+                                        ?>
+                                        <li class="dropdown"><a href="espacemedecins.php">Espace Médecins <span class="fa fa-angle-down"></span></a>
+                                            <div class="submenu-wrapper">
+                                                <div class="submenu-inner">
+                                                    <ul class="dropdown-menu">
+                                                    	<li><a href="med_seconnecter.php">Se Connecter </a></li>
+                                                        <li><a href="med_sinscrire.php">Créer un compte</a></li>
+                                                        
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="dropdown"><a href="forum.php">Forum & Questions <span class="fa fa-angle-down"></span></a>
+                                            <!-- submenu-wrapper -->
+                                            <div class="submenu-wrapper">
+                                                <div class="submenu-inner">
+                                                    <ul class="dropdown-menu">
+                                                    	<li><a href="f_seconnecter.php">Se Connecter </a></li>
+                                                        <li><a href="f_sinscrire.php">Créer un compte</a></li>
+                                                        
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>
+                                       <?php endif;
+                                        $var = "";
+                                        if($_SESSION["type"] == "doctor") $var = "Dr ";
+                                        if(isset($_SESSION["name"])): 
+                                        ?>
+                                        <li class="dropdown"><a href=""><?php echo "bonjour ".$var.$_SESSION["name"]; ?><span class="fa fa-angle-down"></span></a>
+                                            <div class="submenu-wrapper">
+                                                <div class="submenu-inner">
+                                                    <ul class="dropdown-menu">
+                                                    	<li><a href=".php">visiter profil </a></li>
+                                                        <li><a href="deconnecter.php">se déconnecter</a></li>
+                
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <?php endif;?>
 									 
 									  <!-- /Pages -->
 									  <!-- Blog -->
@@ -160,32 +183,27 @@
 					
 					<!--corps de la page-->
 				<section class="single-service-contents">
-                    <div class="container">	
-
-						<div class="row">
-
-							<div class="col-md-9 col-sm-7 col-xs-12">
-								<h2>Covido en question<br></h2>
-                                    <p><img class="img-alignleft" src="img/forum.jpg" height=50% width=50% alt="image">
-                                        Face à l’épidémie du Coronavirus (COVID-19) les médecins 
-                                        inscrits sur la plateforme « COVIDO » ont pris l’initiative 
-                                        pour répondre à tous vos questions. 
-                                        Tous ce que vous souhaitent savoir que ce soit à propos
-                                        la prévention contre le virus ou bien les mesures de 
-                                        protection à observer au travail.</p>
-										
-                                    <p>Il suffit de créer un compte gratuit ci-dessous <br>
-                                        et d’acceptez les termes de sécurité du site. <br>
-                                        Puis vous pouvez accéder au forum et déposer<br>
-                                        vos question en attendant que nos spécialistes<br>
-                                        vous répondent. Portez-vous bien.<br><br></p>
-								
-									<a href="f_seconnecter.php" class="btn btn-info"> Se connecter </a>
-									<a href="f_sinscrire.php" class="btn btn-info"> S'inscrire </a>
-
-
-							</div>
-						</div>
+                    <div class="card" style="width: 30rem;" style="center">
+                        <ul class="list-group list-group-flush">
+                    <?php
+                                $servername = "localhost";
+                                $username = "root";
+                                $password = "MyNewPass";
+                                $conn = new mysqli($servername, $username, $password);
+                                if ($conn->connect_error) {
+                                    die("Connection failed: " . $conn->connect_error);
+                                }
+                                $req= "SELECT * FROM projetphp.forum GROUP BY titre ;";
+                                $result = $conn->query($req);
+                    
+                                while($row = $result->fetch_assoc()):
+                                     ?>
+                    
+                      <li class="list-group-item"><?php echo $row["titre"] ?></li>
+                            <?php endwhile;
+                                ?>
+                        </ul>
+				
 					</div>
 				</section>
 			       

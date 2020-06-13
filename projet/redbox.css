@@ -1,0 +1,27 @@
+* {
+    box-sizing: border-box;
+}
+
+#main-alert-red{
+    margin: 0;
+    padding: 10px;
+    background-color:  #ea6a9b;
+    color: #dd2c70;
+    text-align: center;
+    font-family: sans-serif;
+    border-radius: 5px;
+    font-size: 2em;
+}
+
+
+#main-alert-green {
+    margin: 0;
+    padding: 10px;
+    background-color:  #83ea6a;
+    color: #58cc3c;
+    text-align: center;
+    font-family: sans-serif;
+    border-radius: 5px;
+    font-size: 2em;
+}
+

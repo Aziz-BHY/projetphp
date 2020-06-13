@@ -10,11 +10,6 @@ include('config/functions.php');
         extract($_GET);
         $titre = strip_tags($titre);
     }
-   // selectQues($titre);
-    /*$req= "SELECT * FROM projetphp.forum_reponses where correspondace_sujet = ".$row["id"].";";
-    $result = $conn->multi_query($req);
-    if($result->num_rows >= 1) echo $row["id"];
-    $comm = $result->fetch_assoc();*/
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -117,52 +112,40 @@ include('config/functions.php');
 								  <h1 class="logo"><a class="navbar-brand" href="index.php"><img src="img/logo.png" width=190px height=40px alt=""></a></h1>
 							  </div>
 
-							  <!-- Collect the nav links, forms, and other content for toggling -->
-							  <div class="collapse navbar-collapse navbar-collapse">
+							 <!-- Collect the nav links, forms, and other content for toggling -->
+								<div class="collapse navbar-collapse navbar-collapse">
 
-								  <span class="search-button pull-right"><a href="#search"><i class="fa fa-search"></i></a></span>
+									<span class="search-button pull-right"><a href="#search"><i class="fa fa-search"></i></a></span>
 
-								  <ul class="nav navbar-nav navbar-right">
-								  
-									  <li class="active"><a href="index.php">Acceuil <span class="fa "></span></a>
-										  
-									  </li>
-								  
-									  <?php if(!isset($_SESSION["name"])):
+									<ul class="nav navbar-nav navbar-right">
+									
+                                        <li class="active"><a href="index.php">Acceuil <span class="fa "></span></a>
+                                            
+                                        </li>
+                                        <?php if(!isset($_SESSION["name"])):
                                         ?>
-                                        <li class="dropdown"><a href="espacemedecins.php">Espace Médecins <span class="fa fa-angle-down"></span></a>
+                                        <li class="dropdown"><a> S'identifier <span class="fa fa-angle-down"></span></a>
                                             <div class="submenu-wrapper">
                                                 <div class="submenu-inner">
                                                     <ul class="dropdown-menu">
-                                                    	<li><a href="med_seconnecter.php">Se Connecter </a></li>
-                                                        <li><a href="med_sinscrire.php">Créer un compte</a></li>
+                                                    	<li><a href="espacemedecins.php"> Espace médecin </a></li>
+                                                        <li><a href="espace_visiteur.php"> Espace visiteur</a></li>
                                                         
                                                     </ul>
                                                 </div>
                                             </div>
                                         </li>
-                                        <li class="dropdown"><a href="forum.php">Forum & Questions <span class="fa fa-angle-down"></span></a>
-                                            <!-- submenu-wrapper -->
-                                            <div class="submenu-wrapper">
-                                                <div class="submenu-inner">
-                                                    <ul class="dropdown-menu">
-                                                    	<li><a href="f_seconnecter.php">Se Connecter </a></li>
-                                                        <li><a href="f_sinscrire.php">Créer un compte</a></li>
-                                                        
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </li>
+
                                        <?php endif;
                                         $var = "";
                                         if($_SESSION["type"] == "doctor") $var = "Dr ";
                                         if(isset($_SESSION["name"])): 
                                         ?>
-                                        <li class="dropdown"><a href=""><?php echo "bonjour ".$var.$_SESSION["name"]; ?><span class="fa fa-angle-down"></span></a>
+                                        <li class="dropdown"><a href=""><?php echo $var.$_SESSION["name"]; ?><span class="fa fa-angle-down"></span></a>
                                             <div class="submenu-wrapper">
                                                 <div class="submenu-inner">
                                                     <ul class="dropdown-menu">
-                                                    	<li><a href=".php">visiter profil </a></li>
+                                                    	<li><a href="profile.php">visiter profil </a></li>
                                                         <li><a href="deconnecter.php">se déconnecter</a></li>
                 
                                                     </ul>
@@ -170,13 +153,16 @@ include('config/functions.php');
                                             </div>
                                         </li>
                                         <?php endif;?>
-									 
-									  <!-- /Pages -->
-									  <!-- Blog -->
-									  <li class="dropdown"><a href="guide.php">Guide Covid-19 <span class="fa"></span></a>
-										  
-								  </ul>
-							  </div><!-- /.navbar-collapse -->
+                                        <!-- /Pages -->
+										<!-- Blog -->
+                                        <li class="dropdown"><a href="forum.php">Forum & Questions <span class="fa"></span></a>
+                                            <!-- submenu-wrapper -->
+
+                                        </li>
+                                        <li class="dropdown"><a href="guide.php">Guide Covid-19 <span class="fa"></span></a>
+                                            
+									</ul>
+								</div><!-- /.navbar-collapse -->
 						  </div><!-- /.container -->
 
 						  
@@ -199,9 +185,21 @@ include('config/functions.php');
 
 					<section class="cta-section">
 								<div class="container text-center">
+								<?php
+                                if(isset($_SESSION["name"])):
+                        
+                        ?>
 									<a href="question.php" class="btn btn-primary quote-btn">Ajouter une question</a>
 
-								</div><!-- /.container -->
+							 	
+                        <?php 
+                        else: ?>
+                            <h2>il faut se connecter</h2>
+									<a href="question.php" class="btn btn-primary quote-btn">Ajouter une question</a>
+									<a href="question.php" class="btn btn-primary quote-btn">Ajouter une question</a>
+
+                        <?php endif; ?>
+                            </div><!-- /.container -->
 			    	</section>
 				<!--corps de la page-->
 		<section class="single-service-contents">
@@ -211,20 +209,7 @@ include('config/functions.php');
                 $req= "SELECT * FROM projetphp.forum_sujets where titre = '".$titre."';";
                 $req .= "SELECT * FROM projetphp.forum_reponses 
                     where correspondance_sujet = (select id from projetphp.forum_sujets where titre = '".$titre."' );";
-                /*if ($conn->multi_query($req)) {
-                    do {
-                        if ($result = $conn->store_result()) {
-			while ($row = $result->fetch_row()) {
-				printf("%s\n", $row[0]);
-			}
-			$result->free();
-		}
-		/* Affichage d'une séparation 
-		if ($conn->more_results()) {
-			printf("-----------------\n");
-		}
-	} while ($conn->next_result());*/
-
+                
             if ($conn->multi_query($req)) 
              if ($result = $conn->store_result()) 
                  $row = $result->fetch_row();
@@ -300,9 +285,6 @@ include('config/functions.php');
 			    </div>
 			</form>	
 		</div>		
-            <?php else:
-            ?>
-            <h2>il faut se connecter</h2>
             <?php
             endif;
             if(isset($_POST["new_comment"])){

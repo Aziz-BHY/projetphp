@@ -1,8 +1,21 @@
 <?php
+ob_start();
 session_start();
 error_reporting(0);
 if(!isset($_SESSION["name"])){
     header('Location: index.php');
+}
+$servername = "localhost";
+$username = "root";
+$password = "MyNewPass";
+$conn = new mysqli($servername, $username, $password);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+$req= "SELECT * FROM projetphp.".$_SESSION["type"]." where E_mail = '".$_SESSION["mail"]."';";
+$result = $conn->query($req);
+if ($result->num_rows == 1){
+    $row = $result->fetch_assoc();
 }
 ?>
 <!DOCTYPE html>
@@ -105,7 +118,8 @@ if(!isset($_SESSION["name"])){
 							  <div class="navbar-header">
 								  <h1 class="logo"><a class="navbar-brand" href="index.php"><img src="img/logo.png" width=190px height=40px alt=""></a></h1>
 							  </div>
-<!-- Collect the nav links, forms, and other content for toggling -->
+
+							  <!-- Collect the nav links, forms, and other content for toggling -->
 								<div class="collapse navbar-collapse navbar-collapse">
 
 									<span class="search-button pull-right"><a href="#search"><i class="fa fa-search"></i></a></span>
@@ -168,69 +182,101 @@ if(!isset($_SESSION["name"])){
 								<div class="col-xs-12">
 									<div class="page-header-wrap">
 										<div class="page-header">
-									   		<h1>Forum & Questions</h1>
+									   		<h1>Profile</h1>
 									   	</div>
-                                        <ol class="breadcrumb">
-                                            <li><a href="index.php">Acceuil</a></h2></li>
-                                              <li><a href="forum.php">Forum & questions</a></li>
-                                              <li class="active"><a href="question.php">Ajouter une question</a> </li>
-                                        </ol>
 									</div>
 								</div>
 							</div>
 						</div>
 					</section>
 					
+                    <section class="team-service">
+						<div class="container">
+							<div class="row">
+				                <div class="col-xs-12 text-center">
+				                  <h2 class="section-title">Consulter vos informations</h2>
+                                  <span class="section-sub">Et modifier votre mot de passe</span>
 
-				<!--corps de la page-->
-		<section class="single-service-contents container">
-            <!-- début  -->
-            <h2> Ajouter une question : </h2>
-            <form method=post action="question.php">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <label for="titre"> Titre</label>
-                                <input type="text" name="titre" class="form-control" id="titre" placeholder="">
-                        </div>
-                    </div> <!-- /.col -->
-                </div><!-- /.row -->
+				                </div>
+			             	 </div>
+							
+							<div class="team-service-contents">
+								<div class="row">
+									<div class="col-sm-4">
+										<div class="team-service-testimonial">
+											<h2>Modifier votre mot de passe</h2>
+                                            <form method=post action="profile.php">
+                                                <div>
+                                                    <div class="form-group">
+                                                        <label for="ancien">Ancien mot de passe</label>
+                                                        <input id="ancien" name="ancien" type="password" class="form-control"  required>
+                                                    </div>
+                                                </div>
 
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <label for="ques">Votre question</label>
-                            <textarea class="form-control" name="ques" rows="6" id="question" placeholder=""></textarea>
-                        </div>
-                    </div> <!-- /.col -->
-                </div><!-- /.row -->
-                <button type="submit" class="btn btn-primary">Confirmer</button>
-            </form>
-        </section>
-                
-        <!-- fin -->				
-        <?php
-                if(isset($_POST["titre"]) and isset($_POST["ques"])){
-                    $servername = "localhost";
-                    $username = "root";
-                    $password = "MyNewPass";
-                    $conn = new mysqli($servername, $username, $password);
-                    if ($conn->connect_error) {
-                        die("Connection failed: " . $conn->connect_error);
-                    }
-                    $req= "SELECT * FROM projetphp.forum_sujets where titre = '".$_POST["titre"]."';";
-                    $result = $conn->query($req);
-                    if($result->num_rows >= 1){
-                        echo "ce titre existe deja si vous voulez le voir visiter ce lien";
-                        echo "<a href='forum.php'> link here </a>";
-                    }else {
-                        $req = "insert into projetphp.forum_sujets (auteur, titre, date_derniere_reponse, contenu) values ('".$_SESSION["name"]."','".$_POST["titre"]."',sysdate(),'".$_POST["ques"]."')";
-                        $conn->query($req);
-                       // header('Location: forum1.php?titre='.$_POST["titre"]);
-                          }
-                }
-            
-            ?>
+                                                <div>
+                                                    <div class="form-group">
+                                                        <label for="nouveau">Nouveau mot de passe</label>
+                                                        <input id="nouveau" name="nouveau" type="password" class="form-control"  required>
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <div class="form-group">
+                                                        <label for="repeter">Répétez votre mot de passe</label>
+                                                        <input id="repeter" name="repeter" type="password" class="form-control" placeholder="" required>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div>
+                                                    <button type="submit" class="btn btn-success">Confirmer</button> 
+                                                </div>
+                                                
+                                                
+                                            </form>
+											
+										</div> 
+									</div><!--/.col-->
+                                        <?php
+                                    $erreur = "";
+                                    if(isset($_POST["ancien"]) && isset($_POST["nouveau"]) && isset($_POST["repeter"])){
+                                        if($_POST["ancien"] == $row["password"]){
+                                            if($_POST["nouveau"] == $_POST["repeter"]){
+                                                header('Location: mdp.php?nouveau='.$_POST["nouveau"]);
+                                            }
+                                            else
+                                            $erreur = "veuillez entrer le même mot de passe 2 fois ";
+                                        }
+                                        else
+                                        $erreur = "le mot de passe que vous avez entré est erroné ";
+
+                                        
+                                    } 
+                                    echo $erreur;
+                                ?>
+                                    <div class="col-sm-7 col-lg-offset-1">
+                                        <div class="profile">
+                                            <h3>
+                                                <span class="profile"> Nom et prénom : </span>
+                                                <em><span id="nom"> <?= $row["nom"]." ".$row["prenom"] ?> </span></em>
+                                                <hr><br>
+
+                                                <span> Numéro de téléphone : </span>
+                                                <em><span id="tel"><?= $row["tel"] ?></span></em>
+                                                <hr><br>
+
+                                                <span> E-mail : </span>
+                                                <em><span id="email"> <?= $row["E_mail"] ?> </span></em>
+                                                <hr><br>
+
+                                            </h3>
+                                        </div><!--/.career-contents -->
+
+                                    </div>
+								</div><!--/.row-->
+							</div>
+						</div><!-- /.container-->
+					</section>
+					<!-- /.team-service -->
 			       
 			        
 			    <!-- copyright-section start -->
@@ -254,7 +300,7 @@ if(!isset($_SESSION["name"])){
 				<div class="status-mes"></div>
 			</div>
 		</div>
-
+        
 
 		<!-- jQuery -->
 	    <script src="js/jquery.js"></script>

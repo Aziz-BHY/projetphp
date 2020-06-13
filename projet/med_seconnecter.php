@@ -2,7 +2,7 @@
 ob_start();
 session_start();
  if(isset($_SESSION["name"])){
-    header('Location: index.php');
+   header('Location: index.php');
 }
 error_reporting(0);
 ?>
@@ -43,6 +43,7 @@ error_reporting(0);
 	    <link href="css/style.css" rel="stylesheet">
 	    <!-- Responsive CSS -->
 	    <link href="css/responsive.css" rel="stylesheet">
+		<link href="redbox.css" rel="stylesheet">
 
 	    <script src="js/vendor/modernizr-2.8.1.min.js"></script>
 	    <!-- HTML5 Shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -107,46 +108,56 @@ error_reporting(0);
 							  </div>
 
 							  <!-- Collect the nav links, forms, and other content for toggling -->
-							  <div class="collapse navbar-collapse navbar-collapse">
+								<div class="collapse navbar-collapse navbar-collapse">
 
-								  <span class="search-button pull-right"><a href="#search"><i class="fa fa-search"></i></a></span>
+									<span class="search-button pull-right"><a href="#search"><i class="fa fa-search"></i></a></span>
 
-								  <ul class="nav navbar-nav navbar-right">
-								  
-									  <li class="active"><a href="index.php">Acceuil <span class="fa "></span></a>
-										  
-									  </li>
-								  
-									  <li class="dropdown"><a href="espacemedecins.php">Espace Médecins <span class="fa fa-angle-down"></span></a>
-										  <div class="submenu-wrapper">
-											  <div class="submenu-inner">
-												  <ul class="dropdown-menu">
-													  <li><a href="med_seconnecter.php">Se Connecter </a></li>
-													  <li><a href="med_sinscrire.php">Créer un compte</a></li>
-													  
-												  </ul>
-											  </div>
-										  </div>
-									  </li>
-									  <li class="dropdown"><a href="#">Forum & Questions <span class="fa fa-angle-down"></span></a>
-										  <!-- submenu-wrapper -->
-										  <div class="submenu-wrapper">
-											  <div class="submenu-inner">
-												  <ul class="dropdown-menu">
-													  <li><a href="air.php">Se Connecter </a></li>
-													  <li><a href="marine.php">Créer un compte</a></li>
-													  
-												  </ul>
-											  </div>
-										  </div>
-									  </li>
-									 
-									  <!-- /Pages -->
-									  <!-- Blog -->
-									  <li class="dropdown"><a href="#">Guide Covid-19 <span class="fa"></span></a>
-										  
-								  </ul>
-							  </div><!-- /.navbar-collapse -->
+									<ul class="nav navbar-nav navbar-right">
+									
+                                        <li class="active"><a href="index.php">Acceuil <span class="fa "></span></a>
+                                            
+                                        </li>
+                                        <?php if(!isset($_SESSION["name"])):
+                                        ?>
+                                        <li class="dropdown"><a> S'identifier <span class="fa fa-angle-down"></span></a>
+                                            <div class="submenu-wrapper">
+                                                <div class="submenu-inner">
+                                                    <ul class="dropdown-menu">
+                                                    	<li><a href="espacemedecins.php"> Espace médecin </a></li>
+                                                        <li><a href="espace_visiteur.php"> Espace visiteur</a></li>
+                                                        
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                       <?php endif;
+                                        $var = "";
+                                        if($_SESSION["type"] == "doctor") $var = "Dr ";
+                                        if(isset($_SESSION["name"])): 
+                                        ?>
+                                        <li class="dropdown"><a href=""><?php echo $var.$_SESSION["name"]; ?><span class="fa fa-angle-down"></span></a>
+                                            <div class="submenu-wrapper">
+                                                <div class="submenu-inner">
+                                                    <ul class="dropdown-menu">
+                                                    	<li><a href="profile.php">visiter profil </a></li>
+                                                        <li><a href="deconnecter.php">se déconnecter</a></li>
+                
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <?php endif;?>
+                                        <!-- /Pages -->
+										<!-- Blog -->
+                                        <li class="dropdown"><a href="forum.php">Forum & Questions <span class="fa"></span></a>
+                                            <!-- submenu-wrapper -->
+
+                                        </li>
+                                        <li class="dropdown"><a href="guide.php">Guide Covid-19 <span class="fa"></span></a>
+                                            
+									</ul>
+								</div><!-- /.navbar-collapse -->	
 						  </div><!-- /.container -->
 
 						  
@@ -190,7 +201,7 @@ error_reporting(0);
 
                                 <button type="submit" class="btn btn-primary">Se connecter</button>
                             </form>
-
+                                <br><br>
 							<?php 
                             if(isset($_POST["med_cin"])){
                                  $servername = "localhost";
@@ -205,14 +216,15 @@ error_reporting(0);
                                 if($result->num_rows == 1){
                                     $row = $result->fetch_assoc();
                                     if($row["accepted"] == "en attente"){
-                                        echo "votre demande d'adition n'a pas été accépté encore";
+                                        echo "	<div id='main-alert-red'>votre demande n'est pas encore acceptée </div>";
                                     }
                                    else{ $_SESSION["id"] = $row["CIN"];
                                     $_SESSION["name"] = $row["nom"];
                                     $_SESSION["type"] = "doctor";
+                                    $_SESSION["mail"] = $row["E_mail"];
                                     header('Location: index.php');
                                     }
-                                } else echo "<div>les données que vous avez saisis sont erronnées<div> ";
+                                } else echo "	<div id='main-alert-red'>donnés erroné <br> si vous n'avez pas un compte il faut s'inscrire </div> ";
                             }
                              ob_end_flush();
                             ?>

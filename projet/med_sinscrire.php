@@ -15,6 +15,7 @@ error_reporting(0);
 	    <meta name="viewport" content="width=device-width, initial-scale=1">
 	    <meta name="description" content="">
 	    <meta name="author" content="">
+        		<link href="redbox.css" rel="stylesheet">
 
 	    <title>COVIDO</title>
 	   	<!-- Web Fonts -->
@@ -58,17 +59,18 @@ error_reporting(0);
 	<body id="page-top">
         <?php 
         include('config/functions.php');
-        $erreurS = "";
+        $correct = "vide";
         if(isset($_POST["med_CIN"])){
-            if(strlen($_POST["med_CIN"]) != 8)                  $erreurS = $erreurS . "CIN doit avoir 8 chiffres <br>";
-            if(existDB($_POST["med_CIN"],"doctor","CIN"))      $erreurS = $erreurS . "CIN existe deja <br>";
-            if(existDB($_POST["med_ID"],"doctor","DoctorID"))  $erreurS = $erreurS . "ID existe deja <br>";  
-            if(existDB($_POST["med_tel"],"doctor","tel"))      $erreurS = $erreurS . "ce numero de tel existe deja <br>";
-                        
-                
+            $erreurS = "";
+            if(strlen($_POST["med_CIN"]) != 8)                    $erreurS = $erreurS . "CIN doit avoir 8 chiffres <br>";
+            if(existDB($_POST["med_CIN"],"doctor","CIN"))         $erreurS = $erreurS . "CIN existe deja <br>";
+            if(existDB($_POST["med_ID"],"doctor","DoctorID"))     $erreurS = $erreurS . "ID existe deja <br>";  
+            if(existDB($_POST["med_tel"],"doctor","tel"))         $erreurS = $erreurS . "ce numero de tel existe deja <br>";
+                $correct = "pas correct";
             
-            if($erreurS === "")
-            insert("'".$_POST["med_nom"]."','".$_POST["med_prenom"]."','".$_POST["med_CIN"]."','".$_POST["med_naissance"]."','".$_POST["med_ID"]."','".$_POST["med_tel"]."','".$_POST["med_mail"]."','".$_POST["med_hopital"]."','".$_POST["med_service"]."','".$_POST["med_passe"]."','en attente'", "doctor");
+            if($erreurS === ""){
+               $correct="correct"; insert("'".$_POST["med_nom"]."','".$_POST["med_prenom"]."','".$_POST["med_CIN"]."','".$_POST["med_naissance"]."','".$_POST["med_ID"]."','".$_POST["med_tel"]."','".$_POST["med_mail"]."','".$_POST["med_hopital"]."','".$_POST["med_service"]."','".$_POST["med_passe"]."','en attente'", "doctor");
+            }
         }
 
         ?>
@@ -122,47 +124,57 @@ error_reporting(0);
 
 							  </div>
 
-							  <!-- Collect the nav links, forms, and other content for toggling -->
-							  <div class="collapse navbar-collapse navbar-collapse">
+							 <!-- Collect the nav links, forms, and other content for toggling -->
+								<div class="collapse navbar-collapse navbar-collapse">
 
-								  <span class="search-button pull-right"><a href="#search"><i class="fa fa-search"></i></a></span>
+									<span class="search-button pull-right"><a href="#search"><i class="fa fa-search"></i></a></span>
 
-								  <ul class="nav navbar-nav navbar-right">
-								  
-									  <li class="active"><a href="index.php">Acceuil <span class="fa "></span></a>
-										  
-									  </li>
-								  
-									  <li class="dropdown"><a href="espacemedecins.php">Espace Médecins <span class="fa fa-angle-down"></span></a>
-										  <div class="submenu-wrapper">
-											  <div class="submenu-inner">
-												  <ul class="dropdown-menu">
-													  <li><a href="med_seconnecter.php">Se Connecter </a></li>
-													  <li><a href="med_sinscrire.php">Créer un compte</a></li>
-													  
-												  </ul>
-											  </div>
-										  </div>
-									  </li>
-									  <li class="dropdown"><a href="forum.php">Forum & Questions <span class="fa fa-angle-down"></span></a>
-										  <!-- submenu-wrapper -->
-										  <div class="submenu-wrapper">
-											  <div class="submenu-inner">
-												  <ul class="dropdown-menu">
-													  <li><a href="f_seconnecter.php">Se Connecter </a></li>
-													  <li><a href="f_sinscrire.php">Créer un compte</a></li>
-													  
-												  </ul>
-											  </div>
-										  </div>
-									  </li>
-									 
-									  <!-- /Pages -->
-									  <!-- Blog -->
-									  <li class="dropdown"><a href="guide.php">Guide Covid-19 <span class="fa"></span></a>
-										  
-								  </ul>
-							  </div><!-- /.navbar-collapse -->
+									<ul class="nav navbar-nav navbar-right">
+									
+                                        <li class="active"><a href="index.php">Acceuil <span class="fa "></span></a>
+                                            
+                                        </li>
+                                        <?php if(!isset($_SESSION["name"])):
+                                        ?>
+                                        <li class="dropdown"><a> S'identifier <span class="fa fa-angle-down"></span></a>
+                                            <div class="submenu-wrapper">
+                                                <div class="submenu-inner">
+                                                    <ul class="dropdown-menu">
+                                                    	<li><a href="espacemedecins.php"> Espace médecin </a></li>
+                                                        <li><a href="espace_visiteur.php"> Espace visiteur</a></li>
+                                                        
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                       <?php endif;
+                                        $var = "";
+                                        if($_SESSION["type"] == "doctor") $var = "Dr ";
+                                        if(isset($_SESSION["name"])): 
+                                        ?>
+                                        <li class="dropdown"><a href=""><?php echo $var.$_SESSION["name"]; ?><span class="fa fa-angle-down"></span></a>
+                                            <div class="submenu-wrapper">
+                                                <div class="submenu-inner">
+                                                    <ul class="dropdown-menu">
+                                                    	<li><a href="profile.php">visiter profil </a></li>
+                                                        <li><a href="deconnecter.php">se déconnecter</a></li>
+                
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <?php endif;?>
+                                        <!-- /Pages -->
+										<!-- Blog -->
+                                        <li class="dropdown"><a href="forum.php">Forum & Questions <span class="fa"></span></a>
+                                            <!-- submenu-wrapper -->
+
+                                        </li>
+                                        <li class="dropdown"><a href="guide.php">Guide Covid-19 <span class="fa"></span></a>
+                                            
+									</ul>
+								</div><!-- /.navbar-collapse -->	
 						  </div><!-- /.container -->
 
 						  
@@ -259,13 +271,20 @@ error_reporting(0);
 									<div class="form-group">
 										<label for="med_passe">Mot de passe</label>
 										<input id="med_passe" name="med_passe" type="password" class="form-control" required="" placeholder="">
-									</div>
-                                <?php
-                                echo $erreurS;
-                                ?>
+								                                	</div>
+
                                 <button type="submit" class="btn btn-primary">S'inscrire</button>
-                            </form>			
+                            </form>
+                             <br>
 						</div>
+                           <?php 
+                                if($correct == "correct"):
+                                ?>
+                                <div id="main-alert-green"> votre inscription a été envoyé au admin </div>
+                                <?php elseif($correct == "pas correct"):
+                        ?>
+                         <div id="main-alert-red"><?= $erreurS?> </div>
+                        <?php endif;?>
 					</div>
 				</section>
 			       

@@ -1,9 +1,10 @@
-<?php
+<?php 
+ob_start();
 session_start();
-error_reporting(0);
-if(!isset($_SESSION["name"])){
-    header('Location: index.php');
+ if(isset($_SESSION["name"])){
+   header('Location: index.php');
 }
+error_reporting(0);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -97,15 +98,14 @@ if(!isset($_SESSION["name"])){
 						  </form>
 					  </div>
 					  
-
-					  
 					  <nav class="navbar navbar-default" role="navigation">
 						  
 						  <div class="container mainnav">
 							  <div class="navbar-header">
-								  <h1 class="logo"><a class="navbar-brand" href="index.php"><img src="img/logo.png" width=190px height=40px alt=""></a></h1>
+								  <h1 class="logo"><a class="navbar-brand" href="index.html"><img src="img/logo.png" width=190px height=40px alt=""></a></h1>
 							  </div>
-<!-- Collect the nav links, forms, and other content for toggling -->
+
+							  <!-- Collect the nav links, forms, and other content for toggling -->
 								<div class="collapse navbar-collapse navbar-collapse">
 
 									<span class="search-button pull-right"><a href="#search"><i class="fa fa-search"></i></a></span>
@@ -170,70 +170,45 @@ if(!isset($_SESSION["name"])){
 										<div class="page-header">
 									   		<h1>Forum & Questions</h1>
 									   	</div>
-                                        <ol class="breadcrumb">
-                                            <li><a href="index.php">Acceuil</a></h2></li>
-                                              <li><a href="forum.php">Forum & questions</a></li>
-                                              <li class="active"><a href="question.php">Ajouter une question</a> </li>
-                                        </ol>
 									</div>
 								</div>
 							</div>
 						</div>
 					</section>
 					
+					<!--corps de la page-->
+				<section class="single-service-contents">
+                    <div class="container">	
 
-				<!--corps de la page-->
-		<section class="single-service-contents container">
-            <!-- début  -->
-            <h2> Ajouter une question : </h2>
-            <form method=post action="question.php">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <label for="titre"> Titre</label>
-                                <input type="text" name="titre" class="form-control" id="titre" placeholder="">
-                        </div>
-                    </div> <!-- /.col -->
-                </div><!-- /.row -->
+						<div class="row">
 
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <label for="ques">Votre question</label>
-                            <textarea class="form-control" name="ques" rows="6" id="question" placeholder=""></textarea>
-                        </div>
-                    </div> <!-- /.col -->
-                </div><!-- /.row -->
-                <button type="submit" class="btn btn-primary">Confirmer</button>
-            </form>
-        </section>
-                
-        <!-- fin -->				
-        <?php
-                if(isset($_POST["titre"]) and isset($_POST["ques"])){
-                    $servername = "localhost";
-                    $username = "root";
-                    $password = "MyNewPass";
-                    $conn = new mysqli($servername, $username, $password);
-                    if ($conn->connect_error) {
-                        die("Connection failed: " . $conn->connect_error);
-                    }
-                    $req= "SELECT * FROM projetphp.forum_sujets where titre = '".$_POST["titre"]."';";
-                    $result = $conn->query($req);
-                    if($result->num_rows >= 1){
-                        echo "ce titre existe deja si vous voulez le voir visiter ce lien";
-                        echo "<a href='forum.php'> link here </a>";
-                    }else {
-                        $req = "insert into projetphp.forum_sujets (auteur, titre, date_derniere_reponse, contenu) values ('".$_SESSION["name"]."','".$_POST["titre"]."',sysdate(),'".$_POST["ques"]."')";
-                        $conn->query($req);
-                       // header('Location: forum1.php?titre='.$_POST["titre"]);
-                          }
-                }
-            
-            ?>
+							<div class="col-md-9 col-sm-7 col-xs-12">
+								<h2>Covido en question<br></h2>
+                                    <p><img class="img-alignleft" src="img/forum.jpg" height=50% width=50% alt="image">
+                                        Face à l’épidémie du Coronavirus (COVID-19) les médecins 
+                                        inscrits sur la plateforme « COVIDO » ont pris l’initiative 
+                                        pour répondre à tous vos questions. 
+                                        Tous ce que vous souhaitent savoir que ce soit à propos
+                                        la prévention contre le virus ou bien les mesures de 
+                                        protection à observer au travail.</p>
+										
+                                    <p>Il suffit de créer un compte gratuit ci-dessous <br>
+                                        et d’acceptez les termes de sécurité du site. <br>
+                                        Puis vous pouvez accéder au forum et déposer<br>
+                                        vos question en attendant que nos spécialistes<br>
+                                        vous répondent. Portez-vous bien.<br><br></p>
+								
+									<a href="f_seconnecter.html" class="btn btn-info"> Se connecter </a>
+									<a href="f_sinscrire.html" class="btn btn-info"> S'inscrire </a>
+
+
+							</div>
+						</div>
+					</div>
+				</section>
 			       
 			        
-			    <!-- copyright-section start -->
+			        <!-- copyright-section start -->
 			        <footer class="copyright-section">
 			        	<div class="container text-center">
 			        		<div class="copyright-info">
@@ -241,8 +216,8 @@ if(!isset($_SESSION["name"])){
 			        		</div>
 			        	</div><!-- /.container -->
 			        </footer>
-				<!-- copyright-section end -->
-			        
+<!-- copyright-section end -->
+			        <!-- copyright-section end -->
 				</div> <!-- .st-content -->
     		</div> <!-- .st-pusher -->
 

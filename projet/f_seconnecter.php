@@ -107,46 +107,56 @@ error_reporting(0);
 							  </div>
 
 							  <!-- Collect the nav links, forms, and other content for toggling -->
-							  <div class="collapse navbar-collapse navbar-collapse">
+								<div class="collapse navbar-collapse navbar-collapse">
 
-								  <span class="search-button pull-right"><a href="#search"><i class="fa fa-search"></i></a></span>
+									<span class="search-button pull-right"><a href="#search"><i class="fa fa-search"></i></a></span>
 
-								  <ul class="nav navbar-nav navbar-right">
-								  
-									  <li class="active"><a href="index.php">Acceuil <span class="fa "></span></a>
-										  
-									  </li>
-								  
-									  <li class="dropdown"><a href="espacemedecins.php">Espace Médecins <span class="fa fa-angle-down"></span></a>
-										  <div class="submenu-wrapper">
-											  <div class="submenu-inner">
-												  <ul class="dropdown-menu">
-													  <li><a href="med_seconnecter.php">Se Connecter </a></li>
-													  <li><a href="med_sinscrire.php">Créer un compte</a></li>
-													  
-												  </ul>
-											  </div>
-										  </div>
-									  </li>
-									  <li class="dropdown"><a href="forum.php">Forum & Questions <span class="fa fa-angle-down"></span></a>
-										  <!-- submenu-wrapper -->
-										  <div class="submenu-wrapper">
-											  <div class="submenu-inner">
-												  <ul class="dropdown-menu">
-													  <li><a href="f_seconnecter.php">Se Connecter </a></li>
-													  <li><a href="f_sinscrire.php">Créer un compte</a></li>
-													  
-												  </ul>
-											  </div>
-										  </div>
-									  </li>
-									 
-									  <!-- /Pages -->
-									  <!-- Blog -->
-									  <li class="dropdown"><a href="guide.php">Guide Covid-19 <span class="fa"></span></a>
-										  
-								  </ul>
-							  </div><!-- /.navbar-collapse -->
+									<ul class="nav navbar-nav navbar-right">
+									
+                                        <li class="active"><a href="index.php">Acceuil <span class="fa "></span></a>
+                                            
+                                        </li>
+                                        <?php if(!isset($_SESSION["name"])):
+                                        ?>
+                                        <li class="dropdown"><a> S'identifier <span class="fa fa-angle-down"></span></a>
+                                            <div class="submenu-wrapper">
+                                                <div class="submenu-inner">
+                                                    <ul class="dropdown-menu">
+                                                    	<li><a href="espacemedecins.php"> Espace médecin </a></li>
+                                                        <li><a href="espace_visiteur.php"> Espace visiteur</a></li>
+                                                        
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                       <?php endif;
+                                        $var = "";
+                                        if($_SESSION["type"] == "doctor") $var = "Dr ";
+                                        if(isset($_SESSION["name"])): 
+                                        ?>
+                                        <li class="dropdown"><a href=""><?php echo $var.$_SESSION["name"]; ?><span class="fa fa-angle-down"></span></a>
+                                            <div class="submenu-wrapper">
+                                                <div class="submenu-inner">
+                                                    <ul class="dropdown-menu">
+                                                    	<li><a href="profile.php">visiter profil </a></li>
+                                                        <li><a href="deconnecter.php">se déconnecter</a></li>
+                
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <?php endif;?>
+                                        <!-- /Pages -->
+										<!-- Blog -->
+                                        <li class="dropdown"><a href="forum.php">Forum & Questions <span class="fa"></span></a>
+                                            <!-- submenu-wrapper -->
+
+                                        </li>
+                                        <li class="dropdown"><a href="guide.php">Guide Covid-19 <span class="fa"></span></a>
+                                            
+									</ul>
+								</div><!-- /.navbar-collapse -->	
 						  </div><!-- /.container -->
 
 						  
@@ -192,7 +202,7 @@ error_reporting(0);
                             </form>
                             <?php 
                             if(isset($_POST["f_mail"])){
-                                 $servername = "localhost";
+                                $servername = "localhost";
                                 $username = "root";
                                 $password = "MyNewPass";
                                 $conn = new mysqli($servername, $username, $password);
@@ -206,6 +216,7 @@ error_reporting(0);
                                     $_SESSION["name"] = $row["nom"];
                                     $_SESSION["surname"] = $row["prenom"];
                                     $_SESSION["type"] = "visiteur";
+                                    $_SESSION["mail"] = $row["e_mail"];
                                     header('Location: index.php');
                                 }else echo "<div>les données que vous avez saisis sont erronnées<div>";
                             }

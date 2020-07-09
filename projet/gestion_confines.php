@@ -1,9 +1,10 @@
 <?php 
 ob_start();
 session_start();
- if(!isset($_SESSION["name"])){
-   header('Location: index.php');
+ if($_SESSION["type"] != "doctor"){
+    header('Location: index.php');
 }
+
 error_reporting(0);
 ?>
 <!DOCTYPE html>
@@ -41,6 +42,8 @@ error_reporting(0);
     	<link href="css/template.css" rel="stylesheet">
 	    <!-- Custom CSS -->
 	    <link href="css/style.css" rel="stylesheet">
+        <link href="css/tableau.css" rel="stylesheet">
+
 	    <!-- Responsive CSS -->
 	    <link href="css/responsive.css" rel="stylesheet">
 
@@ -51,6 +54,20 @@ error_reporting(0);
 		    <script src="js/vendor/html5shim.js"></script>
 		    <script src="js/vendor/respond.min.js"></script>
 	    <![endif]-->
+
+		<script language="javascript">
+		function Supprimer_confine(id){
+        var elm = document.getElementById(id);
+        var elms = elm.getElementsByTagName("td");
+        var xhttp;
+        xhttp = new XMLHttpRequest();
+        xhttp.open("GET", "supprimerConfine.php?id="+elms[0].innerHTML, true);
+        xhttp.send();
+        elm.parentNode.removeChild(elm);
+		}
+		</script>
+
+
 	</head>
 
 	
@@ -91,22 +108,25 @@ error_reporting(0);
 						</nav><!-- /.top-bar -->
 
 						<div id="search">
-						  <button type="button" class="close">×</button>
-						  <form>
-							  <input type="search" value="" placeholder="type keyword(s) here" />
-							  <button type="submit" class="btn btn-primary">Search</button>
-						  </form>
-					  </div>
-					  
-					  <nav class="navbar navbar-default" role="navigation">
-						  
-						  <div class="container mainnav">
-							  <div class="navbar-header">
-								  <h1 class="logo"><a class="navbar-brand" href="index.php"><img src="img/logo.png" width=190px height=40px alt=""></a></h1>
-							  </div>
+						    <button type="button" class="close">x</button>
+						    <form methode=post action="forum.php">
+						        <input type="search" value="" name="searchfor"  placeholder="type keyword(s) here" />
+						        <button type="submit" class="btn btn-primary">Search</button>
+						    </form>
+						</div>
+						
+						<nav class="navbar navbar-default" role="navigation">
+							
+							<div class="container mainnav">
+								<div class="navbar-header">
+									<h1 class="logo"><a class="navbar-brand" href="index.php"><img src="img/logo.png" width=190px height=40px alt=""></a></h1>
 
-							 <!-- Collect the nav links, forms, and other content for toggling -->
-								<div class="collapse navbar-collapse navbar-collapse">
+			                     
+
+								</div>
+
+                               <!-- Collect the nav links, forms, and other content for toggling -->
+							  <div class="collapse navbar-collapse navbar-collapse">
 
 									<span class="search-button pull-right"><a href="#search"><i class="fa fa-search"></i></a></span>
 
@@ -115,61 +135,58 @@ error_reporting(0);
                                         <li class="active"><a href="index.php">Acceuil <span class="fa "></span></a>
                                             
                                         </li>
-                                        <?php if(!isset($_SESSION["name"])):
-                                        ?>
-                                        <li class="dropdown"><a> S'identifier <span class="fa fa-angle-down"></span></a>
+                                        
+                                         <li class="dropdown"><a href="#">Dr <?=$_SESSION["name"]?> <span class="fa fa-angle-down"></span></a>
                                             <div class="submenu-wrapper">
                                                 <div class="submenu-inner">
                                                     <ul class="dropdown-menu">
-                                                    	<li><a href="espacemedecins.php"> Espace médecin </a></li>
-                                                        <li><a href="espace_visiteur.php"> Espace visiteur</a></li>
+                                                    	<li><a href="profile.php">Mon profile </a></li>
+                                                        <li><a href="deconnecter.php">Se déconnecter</a></li>
                                                         
                                                     </ul>
                                                 </div>
                                             </div>
                                         </li>
 
-                                       <?php endif;
-                                        $var = "";
-                                        if($_SESSION["type"] == "doctor") $var = "Dr ";
-                                        if(isset($_SESSION["name"])): 
-                                        ?>
-                                        <li class="dropdown"><a href=""><?php echo $var.$_SESSION["name"]; ?><span class="fa fa-angle-down"></span></a>
+                                    
+                                        <li class="dropdown"><a href="gestion_confines.php">Gestion des confinés <span class="fa fa-angle-down"></span></a>
                                             <div class="submenu-wrapper">
                                                 <div class="submenu-inner">
                                                     <ul class="dropdown-menu">
-                                                    	<li><a href="profile.php">visiter profil </a></li>
-                                                        <li><a href="deconnecter.php">se déconnecter</a></li>
-                
+                                                    	<li><a href="ajouter_confines.php">Ajouter un confiné </a></li>
+                                                        <li><a href="consulter_confines.php">Consulter un confiné</a></li>
+                                                        
                                                     </ul>
                                                 </div>
                                             </div>
                                         </li>
-                                        <?php endif;?>
-                                        <!-- /Pages -->
-										<!-- Blog -->
-                                        <li class="dropdown"><a href="forum.php">Forum & Questions <span class="fa"></span></a>
-                                            <!-- submenu-wrapper -->
-
-                                        </li>
-                                        <li class="dropdown"><a href="guide.php">Guide Covid-19 <span class="fa"></span></a>
+                                        
+                                        
+                                        <li class="dropdown"><a href="forum.php">Forum<span class="fa"></span></a>
                                             
+                                        </li>
+                                       
+                                        <li class="dropdown"><a href="guide.php">Guide Covid-19 <span class="fa"></span></a>
+                                        <li class="dropdown"><a href="statMAP.php">Statistiques  <span class="fa"></span></a>
+
 									</ul>
-								</div><!-- /.navbar-collapse -->
+								</div><!-- /.navbar-collapse -->	
+							  </div><!-- /.navbar-collapse -->
 						  </div><!-- /.container -->
 
 						  
 					  </nav>
-                  </header>
-                  
+				  </header>
+					
 					<section class="page-title-section">
 						<div class="container">
 							<div class="row">
 								<div class="col-xs-12">
 									<div class="page-header-wrap">
 										<div class="page-header">
-									   		<h1>Espace Médecins</h1>
-									   	</div>
+									   		<h1>Gestion des confinés</h1>
+											
+                                        </div>
 									</div>
 								</div>
 							</div>
@@ -177,32 +194,73 @@ error_reporting(0);
 					</section>
 					
 					<!--corps de la page-->
-                    <section class="single-service-contents">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-3 col-sm-5 col-xs-12">
-                                    <div class="service-sidebar sidebar-wrapper">
 
-                                        <div class="widget">
-                                            <h2 class="widget-title">Gestion des confinés</h2>
-                                            <ul class="service-list">
-                                                <li><a href="#">Ajouter un confiné</a></li>
-                                                <li><a href="#">Chercher un confiné</a></li>
-                                                
-                                            </ul>
-                                        </div><!-- /.widget -->
-                                    </div><!-- /.sidebar-wrapper -->
-                                </div><!-- /.col -->
-                                <div class="col-md-9 col-sm-7 col-xs-12">
+<section class="container" >
+    <br>
+    <span class="haut">
+        <a class="blueButton" href="ajouter_confines.php">+ Ajouter un confiné </a> &nbsp 
+        <a class="blueButton" href="consulter_confines.php">Consulter un confiné </a>    
+    </span>
 
-                                    <!--tableau de bord des confinés  -->
-                                    
-                                </div><!-- /.col -->
-                            </div><!-- /.row -->
-                        </div><!-- /.container -->
-                    </section>
-			       
-			        
+
+    <div class="tbl-content">
+        <table class="confines">
+			<thead class="tbl-header">
+				<tr>
+				<th>ID</th>
+				<th>Nom</th>
+				<th>Prénom</th>
+				<th>CIN</th>
+				<th>Etat critique</th>
+				<th>Date de naissance </th>
+				<th>Date du test </th>
+				<th>Sysmptô mes</th>
+				<th>Remar ques </th>
+				<th>Localisation</th>
+				<th></th>
+				<th></th>
+
+				</tr>
+			</thead>
+				<?php 
+					$servername = "localhost";
+					$username = "root";
+					$password = "MyNewPass";
+					$conn = new mysqli($servername, $username, $password);
+					if ($conn->connect_error) {
+						die("Connection failed: " . $conn->connect_error);
+					}
+					$req= "SELECT * FROM projetphp.confines;";
+					$result = $conn->query($req);
+					$id=0;
+					while($row = $result->fetch_assoc()):
+					$id++;
+				?>
+			<tbody>
+				<tr id="<?=$id?>">
+				<td><?= $row["id_c"]?></td>
+				<td><?= $row["nom_c"]?> </td>
+				<td><?= $row["prenom_c"]?></td>
+				<td><?= $row["cin_c"]?></td>
+				<td><?= $row["etat_c"]?></td>
+				<td><?= $row["date_naissance_c"]?></td>
+				<td><?= $row["date_test_c"]?></td>
+				<td><?= $row["symptome_c"]?></td>
+				<td><?= $row["remarques_c"]?></td>
+				<td> <a href="<?= $row["localisation"]?>" class="goto">↪</a> </td>
+				<td> <a href="modifier_confine.php?id=<?= $row["id_c"]?>">✎</a> </td>
+				<td> <a  onclick="Supprimer_confine(<?=$id?>)">✘</a> </td>
+
+				</tr>
+				
+			</tbody>
+				<?php endwhile;?>
+
+        </table>
+    </div>
+</section>
+
+								
 			        <!-- copyright-section start -->
 			        <footer class="copyright-section">
 			        	<div class="container text-center">
@@ -211,7 +269,6 @@ error_reporting(0);
 			        		</div>
 			        	</div><!-- /.container -->
 			        </footer>
-<!-- copyright-section end -->
 			        <!-- copyright-section end -->
 				</div> <!-- .st-content -->
     		</div> <!-- .st-pusher -->

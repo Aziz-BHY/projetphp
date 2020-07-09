@@ -31,11 +31,13 @@ if(isset($_SESSION["admin_name"])){
         $req= "SELECT * FROM projetphp.admin where username = '".$_POST["username"]."' and password = '".$_POST["mdp"]."';";
         $result = $conn->query($req);
         if ($result->num_rows == 1){
-            header("location: index.php");
+             $row = $result->fetch_assoc();
+            $_SESSION["admin_name"] = $row["username"];
+            header("location: indexAdmin.php");
         }
         else $er =  "username or password not found";
         if(isset($_POST["username"])){
-            echo $er;
+            echo "<h2>".$er."</h2>";
         }
 ?>      
             </form>

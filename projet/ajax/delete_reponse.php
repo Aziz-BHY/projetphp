@@ -4,7 +4,7 @@ if($mysqli->connect_error) {
   exit('Could not connect');
 }
 
-$sql = "update projetphp.doctor set accepted = 'yes' where ID_med = ?;";
+$sql = "delete from projetphp.forum_reponses where id = ? ;";
 
 $stmt = $mysqli->prepare($sql);
 $stmt->bind_param("s", $_GET['id']);

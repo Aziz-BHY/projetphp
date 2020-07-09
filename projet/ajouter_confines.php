@@ -1,11 +1,12 @@
 <?php 
 ob_start();
 session_start();
- if(isset($_SESSION["name"])){
+ if($_SESSION["type"] != "doctor"){
    header('Location: index.php');
 }
 error_reporting(0);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -41,6 +42,8 @@ error_reporting(0);
     	<link href="css/template.css" rel="stylesheet">
 	    <!-- Custom CSS -->
 	    <link href="css/style.css" rel="stylesheet">
+        <link href="css/tableau.css" rel="stylesheet">
+
 	    <!-- Responsive CSS -->
 	    <link href="css/responsive.css" rel="stylesheet">
 
@@ -51,11 +54,39 @@ error_reporting(0);
 		    <script src="js/vendor/html5shim.js"></script>
 		    <script src="js/vendor/respond.min.js"></script>
 	    <![endif]-->
+
+		<script language="javascript">
+		function goto(){
+			var elem = document.getElementById("1");
+			elem.innerHTML = "";
+			<?php
+				echo "<h2>aziz</h2>";
+			?>
+		}
+		</script>
+
+
 	</head>
 
 	
 
 	<body id="page-top">
+		<?php 
+			include('config/functions.php');
+			$ready = false;
+			if(isset($_POST)){
+				if(!existDB($_POST["c_cin"],"confines","cin_c")){
+					if(!existDB($_POST["c_id"],"confines","id_c")){
+						$ready= true;
+					}
+				}
+				if($ready)
+				insert("'".$_POST["c_id"]."','".$_POST["c_nom"]."','".$_POST["c_prenom"].
+				"','".$_POST["c_cin"]."','".$_POST["c_date_naissance"]."','".$_POST["c_date_test"].
+				"','".$_POST["c_symptomes"]."','".$_POST["c_etat"]."','".$_POST["localistion"].
+				"','".$_POST["c_remarques"]."'","confines");
+			}	
+		?>
 		<div id="st-container" class="st-container">
     		<div class="st-pusher">
     			<div class="st-content">
@@ -118,17 +149,32 @@ error_reporting(0);
                                         <li class="active"><a href="index.php">Acceuil <span class="fa "></span></a>
                                             
                                         </li>
-                                        <li class="dropdown"><a href="#">S'identifier <span class="fa fa-angle-down"></span></a>
+                                        
+                                         <li class="dropdown"><a href="#">Dr <?=$_SESSION["name"]?> <span class="fa fa-angle-down"></span></a>
                                             <div class="submenu-wrapper">
                                                 <div class="submenu-inner">
                                                     <ul class="dropdown-menu">
-                                                    	<li><a href="espacemedecins.php">Espace Médecin </a></li>
-                                                        <li><a href="espace_visiteur.php">Espace visiteur</a></li>
+                                                    	<li><a href="profile.php">Mon profile </a></li>
+                                                        <li><a href="deconnecter.php">Se déconnecter</a></li>
                                                         
                                                     </ul>
                                                 </div>
                                             </div>
                                         </li>
+
+                                    
+                                        <li class="dropdown"><a href="gestion_confines.php">Gestion des confinés <span class="fa fa-angle-down"></span></a>
+                                            <div class="submenu-wrapper">
+                                                <div class="submenu-inner">
+                                                    <ul class="dropdown-menu">
+                                                    	<li><a href="ajouter_confines.php">Ajouter un confiné </a></li>
+                                                        <li><a href="consulter_confines.php">Consulter un confiné</a></li>
+                                                        
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        
                                         
                                         <li class="dropdown"><a href="forum.php">Forum<span class="fa"></span></a>
                                             
@@ -138,7 +184,8 @@ error_reporting(0);
                                         <li class="dropdown"><a href="statMAP.php">Statistiques  <span class="fa"></span></a>
 
 									</ul>
-								</div><!-- /.navbar-collapse -->
+								</div><!-- /.navbar-collapse -->	
+							  </div><!-- /.navbar-collapse -->
 						  </div><!-- /.container -->
 
 						  
@@ -151,8 +198,8 @@ error_reporting(0);
 								<div class="col-xs-12">
 									<div class="page-header-wrap">
 										<div class="page-header">
-									   		<h1>Forum & Questions</h1>
-									   	</div>
+									   		<h1>Ajouter un confiné</h1>
+                                        </div>
 									</div>
 								</div>
 							</div>
@@ -160,37 +207,73 @@ error_reporting(0);
 					</section>
 					
 					<!--corps de la page-->
-				<section class="single-service-contents">
-                    <div class="container">	
 
-						<div class="row">
+<section class="container" >
+<br>
+                        <div class="row">       
+                            <form action="ajouter_confines.php" method="POST">
+                                <div class="form-group">
+                                    <label for="c_id"> ID </label>
+                                    <input id="c_id" name="c_id" type="text" class="form-control" required="" placeholder="">
+								</div>
+                                <div class="form-group">
+                                    <label for="c_nom"> Nom </label>
+                                    <input id="c_nom" name="c_nom" type="text" class="form-control" required="" placeholder="">
+								</div>
+                                <div class="form-group">
+                                    <label for="c_prenom"> Prénom </label>
+                                    <input id="c_prenom" name="c_prenom" type="text" class="form-control" required="" placeholder="">
+								</div><div class="form-group">
+                                    <label for="c_cin"> CIN </label>
+                                    <input id="c_cin" name="c_cin" type="text" class="form-control" required="" placeholder="">
+								</div>
+                                <div class="form-group">
+                                    <label for="c_date_naissance"> Date de naissance </label>
+                                    <input id="c_date_naissance" name="c_date_naissance" type="date" class="form-control" required="" placeholder="">
+								</div>
+                                <div class="form-group">
+                                    <label for="c_date_test"> Date du test  </label>
+                                    <input id="c_date_test" name="c_date_test" type="date" class="form-control" required="" placeholder="">
+								</div>
+                                <div class="form-group">
+                                    <label for="c_symptomes"> Symptômes </label>
+                                    <textarea id="c_symptomes" name="c_symptomes" class="form-control" required="" placeholder=""></textarea>
+								</div>
 
-							<div class="col-md-9 col-sm-7 col-xs-12">
-								<h2>Covido en question<br></h2>
-                                    <p><img class="img-alignleft" src="img/forum.jpg" height=50% width=50% alt="image">
-                                        Face à l’épidémie du Coronavirus (COVID-19) les médecins 
-                                        inscrits sur la plateforme « COVIDO » ont pris l’initiative 
-                                        pour répondre à tous vos questions. 
-                                        Tous ce que vous souhaitent savoir que ce soit à propos
-                                        la prévention contre le virus ou bien les mesures de 
-                                        protection à observer au travail.</p>
-										
-                                    <p>Il suffit de créer un compte gratuit ci-dessous <br>
-                                        et d’acceptez les termes de sécurité du site. <br>
-                                        Puis vous pouvez accéder au forum et déposer<br>
-                                        vos question en attendant que nos spécialistes<br>
-                                        vous répondent. Portez-vous bien.<br><br></p>
-								
-									<a href="f_seconnecter.php" class="btn btn-info"> Se connecter </a>
-									<a href="f_sinscrire.php" class="btn btn-info"> S'inscrire </a>
-
-
-							</div>
+                                <div class="form-group">
+                                    <label for="c_etat"> Etat critique </label>
+                                    <ul class="listview">
+                                        <li>
+                                            <label>
+                                                <input name="c_etat" value="oui" checked="" type="radio">
+                                                <span>Oui</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input name="c_etat" value="non" type="radio">
+                                                <span>Non</span>
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="form-group">
+                                    <label for="c_remarques"> Remarques </label>
+                                    <textarea id="c_remarques" name="c_remarques" class="form-control" required="" placeholder=""></textarea>
+								</div>
+                                <div class="form-group">
+                                    <label for="c_localisation"> Localisation  </label>
+                                    <input id="c_localisation" name="c_localisation" type="text" class="form-control" required="" placeholder="">
+								</div>
+                                <br>
+                                <button type="submit" name="ajouter" class="btn btn-primary">Ajouter</button>
+                                
+                            </form>
 						</div>
-					</div>
-				</section>
-			       
-			        
+                        <br>
+</section>
+
+								
 			        <!-- copyright-section start -->
 			        <footer class="copyright-section">
 			        	<div class="container text-center">
@@ -199,7 +282,6 @@ error_reporting(0);
 			        		</div>
 			        	</div><!-- /.container -->
 			        </footer>
-<!-- copyright-section end -->
 			        <!-- copyright-section end -->
 				</div> <!-- .st-content -->
     		</div> <!-- .st-pusher -->

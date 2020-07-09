@@ -1,30 +1,22 @@
 <?php
-ob_start();
-    session_start();
-    error_reporting(0);
-include('config/functions.php');
-    if(!isset($_GET['titre'])){
-        header('Location: index.php');
-    }
-    else{
-        extract($_GET);
-        $titre = strip_tags($titre);
-    }
+session_start();
+error_reporting(0);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
-	<head>
-	    <meta charset="utf-8">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Covido</title>
+    <meta charset="utf-8">
 	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	    <meta name="viewport" content="width=device-width, initial-scale=1">
 	    <meta name="description" content="">
 	    <meta name="author" content="">
 
-	    <title>COVIDO</title>
-	   	<!-- Web Fonts -->
+	    <!-- Web Fonts -->
         <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900,200italic,300italic,400italic,600italic,700italic,900italic' rel='stylesheet' type='text/css'>
-	    <!-- Bootstrap Core CSS -->
+        <!-- Bootstrap Core CSS -->
 	    <link href="css/bootstrap.min.css" rel="stylesheet">
 	    <!-- Flaticon CSS -->
 	    <link href="fonts/flaticon/flaticon.css" rel="stylesheet">
@@ -50,18 +42,83 @@ include('config/functions.php');
 	    <link href="css/responsive.css" rel="stylesheet">
 
 	    <script src="js/vendor/modernizr-2.8.1.min.js"></script>
-	    <!-- HTML5 Shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-	    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	    <!--[if lt IE 9]>
-		    <script src="js/vendor/html5shim.js"></script>
-		    <script src="js/vendor/respond.min.js"></script>
-	    <![endif]-->
-	</head>
 
-	
+    <script src="map/mapdata.js"></script>
+    <script src="map/countrymap.js"></script>
+      <script>
+      function verify(){
+          var elm = document.getElementById("map");
+          var e = elm.getElementsByTagName("path");
+          var la = document.getElementById("lable");
+          var Tozeur = elm.getElementsByClassName("sm_state_TUN101");
+          var Manubah = elm.getElementsByClassName("sm_state_TUN102");
+          var Béja = elm.getElementsByClassName("sm_state_TUN103");
+          var Ben_Arous = elm.getElementsByClassName("sm_state_TUN104");
+          var Bizerte = elm.getElementsByClassName("sm_state_TUN105");
+          var Jendouba = elm.getElementsByClassName("sm_state_TUN106");
+          var Nabeul = elm.getElementsByClassName("sm_state_TUN107");
+          var Tunis = elm.getElementsByClassName("sm_state_TUN108");
+          var Le_Kef = elm.getElementsByClassName("sm_state_TUN109");
+          var Kassérine = elm.getElementsByClassName("sm_state_TUN110");
+          var Gabès = elm.getElementsByClassName("sm_state_TUN111");
+          var Gafsa = elm.getElementsByClassName("sm_state_TUN112");
+          var Sidi_Bou_Zid = elm.getElementsByClassName("sm_state_TUN113");
+          var Sfax = elm.getElementsByClassName("sm_state_TUN114");
+          var Siliana = elm.getElementsByClassName("sm_state_TUN115");
+          var Mahdia = elm.getElementsByClassName("sm_state_TUN116");
+          var Monastir = elm.getElementsByClassName("sm_state_TUN117");
+          var Kairouan = elm.getElementsByClassName("sm_state_TUN118");
+          var Sousse = elm.getElementsByClassName("sm_state_TUN119");
+          var Zaghouan = elm.getElementsByClassName("sm_state_TUN120");
+          var Médenine = elm.getElementsByClassName("sm_state_TUN96");
+          var Kebili = elm.getElementsByClassName("sm_state_TUN97");
+          var Tataouine = elm.getElementsByClassName("sm_state_TUN98");
+          Tozeur[0].onclick = function(){
+              loadRegion("tozeur");
+          };
+          Manubah[0].onclick = function(){loadRegion("Manubah");};
+          Béja[0].onclick = function(){loadRegion("Beja");};
+          Ben_Arous[0].onclick = function(){loadRegion("Ben_Arous");};
+          Bizerte[0].onclick = function(){loadRegion("Bizerte");};
+          Jendouba[0].onclick = function(){loadRegion("Jendouba");};
+          Nabeul[0].onclick = function(){loadRegion("Nabeul");};
+          Tunis[0].onclick = function(){loadRegion("Tunis");};
+          Le_Kef[0].onclick = function(){loadRegion("Kef");};
+          Kassérine[0].onclick = function(){loadRegion("Kasserine");};
+          Gabès[0].onclick = function(){loadRegion("Gabes");};
+          Gafsa[0].onclick = function(){loadRegion("Gafsa");};
+          Sidi_Bou_Zid[0].onclick = function(){loadRegion("Sidi_Bou_Zid");};
+          Sfax[0].onclick = function(){loadRegion("Sfax");};
+          Siliana[0].onclick = function(){loadRegion("Siliana");};
+          Mahdia[0].onclick = function(){loadRegion("Mahdia");};
+          Monastir[0].onclick = function(){loadRegion("Monastir");};
+          Kairouan[0].onclick = function(){loadRegion("Kairouan");};
+          Sousse[0].onclick = function(){loadRegion("Sousse");};
+          Zaghouan[0].onclick = function(){loadRegion("Zaghouan");};
+          Médenine[0].onclick = function(){loadRegion("Medenine");};
+          Kebili[0].onclick = function(){loadRegion("Kebili");};
+          Tataouine[0].onclick = function(){loadRegion("Tataouine");};
+                
+          
+      }
+          function loadRegion(nameRegion){
+              document.getElementById("lable").innerHTML = "waiting";
+              var xhttp = new XMLHttpRequest();
+              xhttp.onreadystatechange = function(){
+                  if(this.readyState == 4 && this.status == 200){
+                      document.getElementById("lable").innerHTML = this.responseText;
+                  }
+              };
+              xhttp.open("GET", "Region.php?q="+nameRegion , true);
+              xhttp.send();
+          }
+      
+      </script>
+  </head>
 
-	<body id="page-top">
-		<div id="st-container" class="st-container">
+  <body onload="verify()" id="page-top">
+
+  <div id="st-container" class="st-container">
     		<div class="st-pusher">
     			<div class="st-content">
 					<header class="header">
@@ -194,7 +251,7 @@ include('config/functions.php');
                                         <li class="dropdown"><a href="statMAP.php">Statistiques  <span class="fa"></span></a>
 
 									</ul>
-								</div><!-- /.navbar-collapse -->
+								</div><!-- /.navbar-collapse -->				
 						  </div><!-- /.container -->
 
 						  
@@ -207,132 +264,29 @@ include('config/functions.php');
 								<div class="col-xs-12">
 									<div class="page-header-wrap">
 										<div class="page-header">
-									   		<h1>Forum & Questions</h1>
-									   	</div>
+									   		<h1>Statistiques en Tunisie</h1>
+                                        </div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</section>
-
-					<section class="cta-section">
-								<div class="container text-center">
-								<?php
-                                if(isset($_SESSION["name"])):
-                        
-                        ?>
-									<a href="question.php" class="btn btn-primary quote-btn">Ajouter une question</a>
-
-							 	
-                        <?php 
-                        else: ?>
-                            <h2>il faut se connecter</h2>
-									<a href="question.php" class="btn btn-primary quote-btn">Ajouter une question</a>
-									<a href="question.php" class="btn btn-primary quote-btn">Ajouter une question</a>
-
-                        <?php endif; ?>
-                            </div><!-- /.container -->
-			    	</section>
-				<!--corps de la page-->
-		<section class="single-service-contents">
-		<!-- début forum-->
-            <?php
-                $conn = connect();
-                $req= "SELECT * FROM projetphp.forum_sujets where titre = '".$titre."';";
-                $req .= "SELECT * FROM projetphp.forum_reponses 
-                    where correspondance_sujet = (select id from projetphp.forum_sujets where titre = '".$titre."' );";
+					
+					<!--corps de la page-->
+                    <section class="annual-report-section">
+                        <div class="container">	
+                            <div class="row">
+                                    <div id="map" class="pull-left"></div>
+                                    <br><br><br>
+                                    <h3><lable id="lable" > </lable><h3>
                 
-            if ($conn->multi_query($req)) 
-             if ($result = $conn->store_result()) 
-                 $row = $result->fetch_row();
-            $id = $row[0];
-            ?>
-<div class="container">
-    <header class="entry-header clearfix">        
-        <h2 class="entry-title"><a href="#" rel=""><?php echo $row[2]; ?></a></h2>
-        <div class="entry-meta">
-            <ul class="list-inline">
-                <li>
-                    <span class="author">
-                        <small>Posté par </small><a class="url" href="#"><?php echo $row[1]; ?></a> 
-                    </span>
-                </li>
-                <li>
-                    <span class="posted-in">
-                    <small>Le </small> <a href="#"><?php echo $row[3];?></a>
-                    </span>
-                </li>
-            </ul>
-        </div>
-    </header>
-
-    <div class="entry-content">
-        <p><?php echo $row[4]; ?></p>
-    </div>
-</div>
-
-        <br><br>
-
-        <div class="fac-accordion">
-            <?php 
-                $conn->next_result();
-                 if ($result = $conn->store_result()) 
-                while ( $row = $result->fetch_row()):
-            ?>
-				<div class="container">
-					<div class="accordion" id="accordion">
-						<div class="accordion-group">
-							<div class="accordion-heading">
-								<a class="accordion-toggle" data-toggle="collapse"  href="#collapse<?=$row[0] ?>">
-									<span id="user"> <?= $row[1] ?> </span>
-                                   
-								</a>
-							</div>
-							
-							<div id="collapse<?=$row[0] ?>" class="accordion-body collapse in">
-								<div class="accordion-inner">
-                                    <?= $row[2] ?> 
-                                    <span id="date" class="pull-right"> <?= $row[3] ?>    </span><br>
-                                    <a class="pull-right">Signaler </a>
-
-								</div>
-							</div><!-- /.accordion-group-->
-						</div><!-- /.accordion-group-->
-						                                      
-					</div>
-				</div>
-            <?php
-                endwhile;
-            ?>
-                
-        </div>
-            <?php
-                if(isset($_SESSION["name"])):
-            ?>
-        <div class="container" id="commentaire">
-            <form class="newsletter-form" method=post action="forum1.php?titre=<?=$titre?>">
-				<div class="form-group">
-					<label class="sr-only" for="InputEmail1">Votre commentaire</label>
-					<input type="text" class="form-control" name="new_comment" id="Comment1" placeholder="Your comment">
-					<button type="submit" class="btn">OK &nbsp;<i class="fa fa-angle-right"></i></button>
-			    </div>
-			</form>	
-		</div>		
-            <?php
-            endif;
-            if(isset($_POST["new_comment"])){
-                insert("0,'".$_SESSION["name"]."', '".$_POST["new_comment"]."' , sysdate(), ".$id, "forum_reponses");
-                unset($_POST);
-                header("refresh:0");
-                ob_end_flush();
-            }
-            ?>
-            
-            
-
-        <!-- fin forum  -->		
-			        
-			    <!-- copyright-section start -->
+                                    <div class="map__liste"> </div>
+                            </div>
+                        </div>
+	
+                    </section>  
+								
+			        <!-- copyright-section start -->
 			        <footer class="copyright-section">
 			        	<div class="container text-center">
 			        		<div class="copyright-info">
@@ -340,8 +294,7 @@ include('config/functions.php');
 			        		</div>
 			        	</div><!-- /.container -->
 			        </footer>
-				<!-- copyright-section end -->
-			        
+			        <!-- copyright-section end -->
 				</div> <!-- .st-content -->
     		</div> <!-- .st-pusher -->
 

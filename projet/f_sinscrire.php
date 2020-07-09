@@ -4,6 +4,7 @@ session_start();
  if(isset($_SESSION["name"])){
     header('Location: index.php');
 }
+error_reporting(0);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -90,23 +91,25 @@ session_start();
 						</nav><!-- /.top-bar -->
 
 						<div id="search">
-						  <button type="button" class="close">×</button>
-						  <form>
-							  <input type="search" value="" placeholder="type keyword(s) here" />
-							  <button type="submit" class="btn btn-primary">Search</button>
-						  </form>
-					  </div>
-					  
-					  <nav class="navbar navbar-default" role="navigation">
-						  
-						  <div class="container mainnav">
-							  <div class="navbar-header">
-								  <h1 class="logo"><a class="navbar-brand" href="index.php"><img src="img/logo.png" width=190px height=40px alt=""></a></h1>
+						    <button type="button" class="close">x</button>
+						    <form methode=post action="forum.php">
+						        <input type="search" value="" name="searchfor"  placeholder="type keyword(s) here" />
+						        <button type="submit" class="btn btn-primary">Search</button>
+						    </form>
+						</div>
+						
+						<nav class="navbar navbar-default" role="navigation">
+							
+							<div class="container mainnav">
+								<div class="navbar-header">
+									<h1 class="logo"><a class="navbar-brand" href="index.php"><img src="img/logo.png" width=190px height=40px alt=""></a></h1>
 
-							  </div>
+			                     
 
-							 <!-- Collect the nav links, forms, and other content for toggling -->
-								<div class="collapse navbar-collapse navbar-collapse">
+								</div>
+
+                               <!-- Collect the nav links, forms, and other content for toggling -->
+							  <div class="collapse navbar-collapse navbar-collapse">
 
 									<span class="search-button pull-right"><a href="#search"><i class="fa fa-search"></i></a></span>
 
@@ -115,47 +118,28 @@ session_start();
                                         <li class="active"><a href="index.php">Acceuil <span class="fa "></span></a>
                                             
                                         </li>
-                                        <?php if(!isset($_SESSION["name"])):
-                                        ?>
-                                        <li class="dropdown"><a> S'identifier <span class="fa fa-angle-down"></span></a>
+                                       
+                                        <li class="dropdown"><a href="#">S'identifier <span class="fa fa-angle-down"></span></a>
                                             <div class="submenu-wrapper">
                                                 <div class="submenu-inner">
                                                     <ul class="dropdown-menu">
-                                                    	<li><a href="espacemedecins.php"> Espace médecin </a></li>
-                                                        <li><a href="espace_visiteur.php"> Espace visiteur</a></li>
+                                                    	<li><a href="espacemedecins.php">Espace Médecin </a></li>
+                                                        <li><a href="espace_visiteur.php">Espace visiteur</a></li>
                                                         
                                                     </ul>
                                                 </div>
                                             </div>
                                         </li>
-
-                                       <?php endif;
-                                        $var = "";
-                                        if($_SESSION["type"] == "doctor") $var = "Dr ";
-                                        if(isset($_SESSION["name"])): 
-                                        ?>
-                                        <li class="dropdown"><a href=""><?php echo $var.$_SESSION["name"]; ?><span class="fa fa-angle-down"></span></a>
-                                            <div class="submenu-wrapper">
-                                                <div class="submenu-inner">
-                                                    <ul class="dropdown-menu">
-                                                    	<li><a href="profile.php">visiter profil </a></li>
-                                                        <li><a href="deconnecter.php">se déconnecter</a></li>
-                
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <?php endif;?>
-                                        <!-- /Pages -->
-										<!-- Blog -->
-                                        <li class="dropdown"><a href="forum.php">Forum & Questions <span class="fa"></span></a>
-                                            <!-- submenu-wrapper -->
-
-                                        </li>
-                                        <li class="dropdown"><a href="guide.php">Guide Covid-19 <span class="fa"></span></a>
+                                        
+                                        <li class="dropdown"><a href="forum.php">Forum<span class="fa"></span></a>
                                             
+                                        </li>
+                                       
+                                        <li class="dropdown"><a href="guide.php">Guide Covid-19 <span class="fa"></span></a>
+                                        <li class="dropdown"><a href="statMAP.php">Statistiques  <span class="fa"></span></a>
+
 									</ul>
-								</div><!-- /.navbar-collapse -->	
+								</div><!-- /.navbar-collapse -->
 						  </div><!-- /.container -->
 
 						  
@@ -168,11 +152,11 @@ session_start();
 								<div class="col-xs-12">
 									<div class="page-header-wrap">
 										<div class="page-header">
-									   		<h1>Forum & Questions</h1>
+									   		<h1>Espace visiteur</h1>
                                         </div>
                                         <ol class="breadcrumb">
                                             <li><a href="index.php">Acceuil</a></h2></li>
-                                              <li><a href="forum.php">Forum & Questions</a></li>
+                                              <li><a href="espace_visiteur.php">espace visiteur</a></li>
                                               <li class="active"><a href="f_sinscrire.php">S'inscrire</a> </li>
                                         </ol>
                                            

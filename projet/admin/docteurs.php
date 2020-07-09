@@ -1,3 +1,14 @@
+<?php
+ob_start();
+session_start();
+error_reporting(0);
+include('config/functions.php');
+if(!isset($_SESSION["admin_name"])){
+    header("location: loginAdmin.php");
+}
+
+
+?>
 <html>
 <head>
 		<meta charset="utf-8">
@@ -12,16 +23,17 @@
         var elms = elm.getElementsByTagName("td");
         var xhttp;
         xhttp = new XMLHttpRequest();
-        xhttp.open("GET", "accept.php?id="+elms[4].innerHTML, true);
+        xhttp.open("GET", "ajax/accept.php?id="+elms[4].innerHTML+"&accept=yes", true);
         xhttp.send();
         elm.parentNode.removeChild(elm);
+      
     }
     function refus(id){
         var elm = document.getElementById(id);
         var elms = elm.getElementsByTagName("td");
-        var xhttp;
+        elms.innerHTML = "";        var xhttp;
         xhttp = new XMLHttpRequest();
-        xhttp.open("GET", "refus.php?id="+elms[4].innerHTML, true);
+        xhttp.open("GET", "ajax/accept.php?id="+elms[4].innerHTML+"&accept=no", true);
         xhttp.send();
         elm.parentNode.removeChild(elm);
     }
@@ -32,9 +44,10 @@
 <body>
 
 <ul class="sidenav">
-  <li><a href="#">Acceuil</a></li>
-  <li><a href="#">Docteurs en attente</a></li>
-  <li><a href="#">Forum</a></li>
+  <li><a href="indexAdmin.php">Acceuil</a></li>
+  <li><a href="docteurs.php">Docteurs en attente</a></li>
+  <li><a href="forum_admin.php">Forum</a></li>
+  <li><a href="statistiques.php">stats</a></li>
 </ul>
 
 <section>
@@ -72,7 +85,7 @@
     ?>
     <table cellpadding="0" cellspacing="0" border="0">
       <tbody>
-        <tr id="1">
+        <tr id=<?= $id ?>>
           <td><?= $row["nom"]?></td>
           <td><?= $row["prenom"]?></td>
           <td><?= $row["Hopital"]?></td>

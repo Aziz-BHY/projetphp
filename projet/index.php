@@ -99,15 +99,12 @@ error_reporting(0);
 								<div class="navbar-header">
 									<h1 class="logo"><a class="navbar-brand" href="index.php"><img src="img/logo.png" width=190px height=40px alt=""></a></h1>
 
-			                        <button type="button" class="navbar-toggle collapsed pull-right" >
-			                          <span class="sr-only">Toggle navigation</span>
-			                          <i class="fa fa-bars"></i>
-			                        </button>
+			                     
 
 								</div>
 
-                                <!-- Collect the nav links, forms, and other content for toggling -->
-								<div class="collapse navbar-collapse navbar-collapse">
+                               <!-- Collect the nav links, forms, and other content for toggling -->
+							  <div class="collapse navbar-collapse navbar-collapse">
 
 									<span class="search-button pull-right"><a href="#search"><i class="fa fa-search"></i></a></span>
 
@@ -116,47 +113,78 @@ error_reporting(0);
                                         <li class="active"><a href="index.php">Acceuil <span class="fa "></span></a>
                                             
                                         </li>
-                                        <?php if(!isset($_SESSION["name"])):
+                                        <?php
+                                        if(!isset($_SESSION["type"])):
                                         ?>
-                                        <li class="dropdown"><a> S'identifier <span class="fa fa-angle-down"></span></a>
+                                        <li class="dropdown"><a href="#">S'identifier <span class="fa fa-angle-down"></span></a>
                                             <div class="submenu-wrapper">
                                                 <div class="submenu-inner">
                                                     <ul class="dropdown-menu">
-                                                    	<li><a href="espacemedecins.php"> Espace médecin </a></li>
-                                                        <li><a href="espace_visiteur.php"> Espace visiteur</a></li>
+                                                    	<li><a href="espacemedecins.php">Espace Médecin </a></li>
+                                                        <li><a href="espace_visiteur.php">Espace visiteur</a></li>
+                                                        
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <?php
+                                        endif;
+                                        if($_SESSION["type"] == "visiteur"):
+                                        ?>
+                                         <li class="dropdown"><a href="#"> <?= $_SESSION["name"]?> <span class="fa fa-angle-down"></span></a>
+                                            <div class="submenu-wrapper">
+                                                <div class="submenu-inner">
+                                                    <ul class="dropdown-menu">
+                                                    	<li><a href="profile.php">Mon profile </a></li>
+                                                        <li><a href="deconnecter.php">Se déconnecter</a></li>
+                                                        
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        
+                                        
+                                        <?php
+                                        endif;
+                                        if($_SESSION["type"] == "doctor"):
+                                        ?>
+                                         <li class="dropdown"><a href="#">Dr <?=$_SESSION["name"]?> <span class="fa fa-angle-down"></span></a>
+                                            <div class="submenu-wrapper">
+                                                <div class="submenu-inner">
+                                                    <ul class="dropdown-menu">
+                                                    	<li><a href="profile.php">Mon profile </a></li>
+                                                        <li><a href="deconnecter.php">Se déconnecter</a></li>
                                                         
                                                     </ul>
                                                 </div>
                                             </div>
                                         </li>
 
-                                       <?php endif;
-                                        $var = "";
-                                        if($_SESSION["type"] == "doctor") $var = "Dr ";
-                                        if(isset($_SESSION["name"])): 
-                                        ?>
-                                        <li class="dropdown"><a href=""><?php echo $var.$_SESSION["name"]; ?><span class="fa fa-angle-down"></span></a>
+                                    
+                                        <li class="dropdown"><a href="gestion_confines.php">Gestion des confinés <span class="fa fa-angle-down"></span></a>
                                             <div class="submenu-wrapper">
                                                 <div class="submenu-inner">
                                                     <ul class="dropdown-menu">
-                                                    	<li><a href="profile.php">visiter profil </a></li>
-                                                        <li><a href="deconnecter.php">se déconnecter</a></li>
-                
+                                                    	<li><a href="ajouter_confines.php">Ajouter un confiné </a></li>
+                                                        <li><a href="consulter_confines.php">Consulter un confiné</a></li>
+                                                        
                                                     </ul>
                                                 </div>
                                             </div>
                                         </li>
-                                        <?php endif;?>
-                                        <!-- /Pages -->
-										<!-- Blog -->
-                                        <li class="dropdown"><a href="forum.php">Forum & Questions <span class="fa"></span></a>
-                                            <!-- submenu-wrapper -->
-
-                                        </li>
-                                        <li class="dropdown"><a href="guide.php">Guide Covid-19 <span class="fa"></span></a>
+                                        
+                                        <?php
+                                        endif;
+                                        ?>
+                                        <li class="dropdown"><a href="forum.php">Forum<span class="fa"></span></a>
                                             
+                                        </li>
+                                       
+                                        <li class="dropdown"><a href="guide.php">Guide Covid-19 <span class="fa"></span></a>
+                                        <li class="dropdown"><a href="statMAP.php">Statistiques  <span class="fa"></span></a>
+
 									</ul>
-								</div><!-- /.navbar-collapse -->								
+								</div><!-- /.navbar-collapse -->				
 							</div><!-- /.container -->
 
 							

@@ -17,7 +17,7 @@ $stmt->close();
 echo "Region: ".$nom."<br>";
 echo "malade: ".$nbMalade."<br>";
 echo "morts: ".$nbMort."<br>";
-echo "gerri: ".$nbGerri."<br>";
+echo "guerri: ".$nbGerri."<br>";
     
 
 ?>

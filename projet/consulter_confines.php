@@ -1,12 +1,13 @@
 <?php 
 ob_start();
 session_start();
- if(isset($_SESSION["name"])){
-   header('Location: index.php');
+ if($_SESSION["type"] !=  "doctor"){
+    header('Location: index.php');
 }
+
 error_reporting(0);
-?>
-<!DOCTYPE html>
+
+?><!DOCTYPE html>
 <html lang="en">
 
 	<head>
@@ -41,6 +42,8 @@ error_reporting(0);
     	<link href="css/template.css" rel="stylesheet">
 	    <!-- Custom CSS -->
 	    <link href="css/style.css" rel="stylesheet">
+        <link href="css/tableau.css" rel="stylesheet">
+
 	    <!-- Responsive CSS -->
 	    <link href="css/responsive.css" rel="stylesheet">
 
@@ -51,6 +54,18 @@ error_reporting(0);
 		    <script src="js/vendor/html5shim.js"></script>
 		    <script src="js/vendor/respond.min.js"></script>
 	    <![endif]-->
+
+		<script language="javascript">
+		function goto(){
+			var elem = document.getElementById("1");
+			elem.innerHTML = "";
+			<?php
+				echo "<h2>aziz</h2>";
+			?>
+		}
+		</script>
+
+
 	</head>
 
 	
@@ -118,17 +133,32 @@ error_reporting(0);
                                         <li class="active"><a href="index.php">Acceuil <span class="fa "></span></a>
                                             
                                         </li>
-                                        <li class="dropdown"><a href="#">S'identifier <span class="fa fa-angle-down"></span></a>
+                                        
+                                         <li class="dropdown"><a href="#">Dr <?=$_SESSION["name"]?> <span class="fa fa-angle-down"></span></a>
                                             <div class="submenu-wrapper">
                                                 <div class="submenu-inner">
                                                     <ul class="dropdown-menu">
-                                                    	<li><a href="espacemedecins.php">Espace Médecin </a></li>
-                                                        <li><a href="espace_visiteur.php">Espace visiteur</a></li>
+                                                    	<li><a href="profile.php">Mon profile </a></li>
+                                                        <li><a href="deconnecter.php">Se déconnecter</a></li>
                                                         
                                                     </ul>
                                                 </div>
                                             </div>
                                         </li>
+
+                                    
+                                        <li class="dropdown"><a href="gestion_confines.php">Gestion des confinés <span class="fa fa-angle-down"></span></a>
+                                            <div class="submenu-wrapper">
+                                                <div class="submenu-inner">
+                                                    <ul class="dropdown-menu">
+                                                    	<li><a href="ajouter_confines.php">Ajouter un confiné </a></li>
+                                                        <li><a href="consulter_confines.php">Consulter un confiné</a></li>
+                                                        
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        
                                         
                                         <li class="dropdown"><a href="forum.php">Forum<span class="fa"></span></a>
                                             
@@ -138,7 +168,8 @@ error_reporting(0);
                                         <li class="dropdown"><a href="statMAP.php">Statistiques  <span class="fa"></span></a>
 
 									</ul>
-								</div><!-- /.navbar-collapse -->
+								</div><!-- /.navbar-collapse -->	
+							  </div><!-- /.navbar-collapse -->
 						  </div><!-- /.container -->
 
 						  
@@ -151,8 +182,13 @@ error_reporting(0);
 								<div class="col-xs-12">
 									<div class="page-header-wrap">
 										<div class="page-header">
-									   		<h1>Forum & Questions</h1>
-									   	</div>
+									   		<h1>Consulter un confiné</h1>
+												<ol class="breadcrumb">
+													<li><a href="index.php">Acceuil</a></h2></li>
+													<li><a href="gestion_confines.php.php">Gestion des confinés</a></li>
+													<li class="active"><a href="consulter_confines.php.php">Consulter un confiné</a> </li>
+												</ol>
+                                        </div>
 									</div>
 								</div>
 							</div>
@@ -160,37 +196,92 @@ error_reporting(0);
 					</section>
 					
 					<!--corps de la page-->
-				<section class="single-service-contents">
-                    <div class="container">	
 
-						<div class="row">
+<section class="container" >
+    <br>
+		
+	<form class="newsletter-form" action="consulter_confines.php" method="post">
+        <div class="form-group">
+            <input type="text" class="form-control" name ="id_search" id="id_search" placeholder="Checher avec ID du confiné">
+            <button type="submit" class="btn">Chercher &nbsp;<i class="fa fa-angle-right"></i></button>
+        </div>
+    </form>
+	<br><br>
 
-							<div class="col-md-9 col-sm-7 col-xs-12">
-								<h2>Covido en question<br></h2>
-                                    <p><img class="img-alignleft" src="img/forum.jpg" height=50% width=50% alt="image">
-                                        Face à l’épidémie du Coronavirus (COVID-19) les médecins 
-                                        inscrits sur la plateforme « COVIDO » ont pris l’initiative 
-                                        pour répondre à tous vos questions. 
-                                        Tous ce que vous souhaitent savoir que ce soit à propos
-                                        la prévention contre le virus ou bien les mesures de 
-                                        protection à observer au travail.</p>
-										
-                                    <p>Il suffit de créer un compte gratuit ci-dessous <br>
-                                        et d’acceptez les termes de sécurité du site. <br>
-                                        Puis vous pouvez accéder au forum et déposer<br>
-                                        vos question en attendant que nos spécialistes<br>
-                                        vous répondent. Portez-vous bien.<br><br></p>
+    <div class="tbl-content">
+				<?php
+					
+					$servername = "localhost";
+					$username = "root";
+					$password = "MyNewPass";
+					$conn = new mysqli($servername, $username, $password);
+					if ($conn->connect_error) {
+						die("Connection failed: " . $conn->connect_error);
+					}
+					if (isset( $_POST["id_search"] )):
+						$req= "SELECT * FROM projetphp.confines WHERE id_c=".$_POST["id_search"].";";
+						$result = $conn->query($req);
+						$id=0;
+						while($row = $result->fetch_assoc()):
+						$id++;
+					
+				?>
+        
+        <h3>
+            <span class="profile"> ID : </span>
+            <em><span id="id"> <?= $row["id_c"]?> </span></em>
+            <hr><br>
+
+            <span> Nom : </span>
+            <em><span id="nom"> <?= $row["nom_c"]?> </span></em>
+            <hr><br>
+
+            <span> Prénom : </span>
+            <em><span id="prenom"> <?= $row["prenom_c"]?> </span></em>
+            <hr><br>
+
+            <span> CIN : </span>
+            <em><span id="cin"> <?= $row["cin_c"]?> </span></em>
+            <hr><br>
+
+            <span> Date de naissance : </span>
+            <em><span id="date"> <?= $row["date_naissance_c"]?></span></em>
+            <hr><br>
+
+			<span> Date du test : </span>
+            <em><span id="date"><?= $row["date_test_c"]?></span></em>
+            <hr><br>
+
+            <span> Symptômes : </span>
+            <em><span id="symptome"> <?= $row["symptome_c"]?> </span></em>
+            <hr><br>
+
+            <span> Etat critique : </span>
+            <em><span id="etat"> <?= $row["etat_c"]?> </span></em>
+            <hr><br>
+
+            <span> Remarques : </span>
+            <em><span id="remarques"><?= $row["remarques_c"]?></span></em>
+            <hr><br>
+
+            <span> Localisation : </span>
+            <em><a><?= $row["localisation"]?>   </a></em>
+            <hr><br>
+						
+
+        </h3>
+		<?php
+			endwhile;
+			endif;
+		?>
+		<a href="#" class="Positif"> Supprimer le confiné </a>
+		<a href="#" class="Negatif"> Modifier la fiche </a>
+
+    </div>
+	<br>
+</section>
+
 								
-									<a href="f_seconnecter.php" class="btn btn-info"> Se connecter </a>
-									<a href="f_sinscrire.php" class="btn btn-info"> S'inscrire </a>
-
-
-							</div>
-						</div>
-					</div>
-				</section>
-			       
-			        
 			        <!-- copyright-section start -->
 			        <footer class="copyright-section">
 			        	<div class="container text-center">
@@ -199,7 +290,6 @@ error_reporting(0);
 			        		</div>
 			        	</div><!-- /.container -->
 			        </footer>
-<!-- copyright-section end -->
 			        <!-- copyright-section end -->
 				</div> <!-- .st-content -->
     		</div> <!-- .st-pusher -->

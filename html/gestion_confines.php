@@ -1,15 +1,11 @@
-<?php
+<?php 
 ob_start();
-    session_start();
-    error_reporting(0);
-include('config/functions.php');
-    if(!isset($_GET['titre'])){
-        header('Location: index.php');
-    }
-    else{
-        extract($_GET);
-        $titre = strip_tags($titre);
-    }
+session_start();
+ if($_SESSION["type"] != "doctor"){
+    header('Location: index.php');
+}
+
+error_reporting(0);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -46,6 +42,8 @@ include('config/functions.php');
     	<link href="css/template.css" rel="stylesheet">
 	    <!-- Custom CSS -->
 	    <link href="css/style.css" rel="stylesheet">
+        <link href="css/tableau.css" rel="stylesheet">
+
 	    <!-- Responsive CSS -->
 	    <link href="css/responsive.css" rel="stylesheet">
 
@@ -56,6 +54,20 @@ include('config/functions.php');
 		    <script src="js/vendor/html5shim.js"></script>
 		    <script src="js/vendor/respond.min.js"></script>
 	    <![endif]-->
+
+		<script language="javascript">
+		function Supprimer_confine(id){
+        var elm = document.getElementById(id);
+        var elms = elm.getElementsByTagName("td");
+        var xhttp;
+        xhttp = new XMLHttpRequest();
+        xhttp.open("GET", "ajax/supprimerConfine.php?id="+elms[0].innerHTML, true);
+        xhttp.send();
+        elm.parentNode.removeChild(elm);
+		}
+		</script>
+
+
 	</head>
 
 	
@@ -123,41 +135,7 @@ include('config/functions.php');
                                         <li class="active"><a href="index.php">Acceuil <span class="fa "></span></a>
                                             
                                         </li>
-                                        <?php
-                                        if(!isset($_SESSION["type"])):
-                                        ?>
-                                        <li class="dropdown"><a href="#">S'identifier <span class="fa fa-angle-down"></span></a>
-                                            <div class="submenu-wrapper">
-                                                <div class="submenu-inner">
-                                                    <ul class="dropdown-menu">
-                                                    	<li><a href="espacemedecins.php">Espace Médecin </a></li>
-                                                        <li><a href="espace_visiteur.php">Espace visiteur</a></li>
-                                                        
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <?php
-                                        endif;
-                                        if($_SESSION["type"] == "visiteur"):
-                                        ?>
-                                         <li class="dropdown"><a href="#"> <?= $_SESSION["name"]?> <span class="fa fa-angle-down"></span></a>
-                                            <div class="submenu-wrapper">
-                                                <div class="submenu-inner">
-                                                    <ul class="dropdown-menu">
-                                                    	<li><a href="profile.php">Mon profile </a></li>
-                                                        <li><a href="deconnecter.php">Se déconnecter</a></li>
-                                                        
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </li>
                                         
-                                        
-                                        <?php
-                                        endif;
-                                        if($_SESSION["type"] == "doctor"):
-                                        ?>
                                          <li class="dropdown"><a href="#">Dr <?=$_SESSION["name"]?> <span class="fa fa-angle-down"></span></a>
                                             <div class="submenu-wrapper">
                                                 <div class="submenu-inner">
@@ -183,9 +161,7 @@ include('config/functions.php');
                                             </div>
                                         </li>
                                         
-                                        <?php
-                                        endif;
-                                        ?>
+                                        
                                         <li class="dropdown"><a href="forum.php">Forum<span class="fa"></span></a>
                                             
                                         </li>
@@ -194,7 +170,8 @@ include('config/functions.php');
                                         <li class="dropdown"><a href="statMAP.php">Statistiques  <span class="fa"></span></a>
 
 									</ul>
-								</div><!-- /.navbar-collapse -->
+								</div><!-- /.navbar-collapse -->	
+							  </div><!-- /.navbar-collapse -->
 						  </div><!-- /.container -->
 
 						  
@@ -207,132 +184,84 @@ include('config/functions.php');
 								<div class="col-xs-12">
 									<div class="page-header-wrap">
 										<div class="page-header">
-									   		<h1>Forum & Questions</h1>
-									   	</div>
+									   		<h1>Gestion des confinés</h1>
+											
+                                        </div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</section>
+					
+					<!--corps de la page-->
 
-					<section class="cta-section">
-								<div class="container text-center">
-								<?php
-                                if(isset($_SESSION["name"])):
-                        
-                        ?>
-									<a href="question.php" class="btn btn-primary quote-btn">Ajouter une question</a>
+<section class="container" >
+    <br>
+    <span class="haut">
+        <a class="blueButton" href="ajouter_confines.php">+ Ajouter un confiné </a> &nbsp 
+        <a class="blueButton" href="consulter_confines.php">Consulter un confiné </a>    
+    </span>
 
-							 	
-                        <?php 
-                        else: ?>
-                            <h2>il faut se connecter</h2>
-									<a href="question.php" class="btn btn-primary quote-btn">Ajouter une question</a>
-									<a href="question.php" class="btn btn-primary quote-btn">Ajouter une question</a>
 
-                        <?php endif; ?>
-                            </div><!-- /.container -->
-			    	</section>
-				<!--corps de la page-->
-		<section class="single-service-contents">
-		<!-- début forum-->
-            <?php
-                $conn = connect();
-                $req= "SELECT * FROM projetphp.forum_sujets where titre = '".$titre."';";
-                $req .= "SELECT * FROM projetphp.forum_reponses 
-                    where correspondance_sujet = (select id from projetphp.forum_sujets where titre = '".$titre."' );";
-                
-            if ($conn->multi_query($req)) 
-             if ($result = $conn->store_result()) 
-                 $row = $result->fetch_row();
-            $id = $row[0];
-            ?>
-<div class="container">
-    <header class="entry-header clearfix">        
-        <h2 class="entry-title"><a href="#" rel=""><?php echo $row[2]; ?></a></h2>
-        <div class="entry-meta">
-            <ul class="list-inline">
-                <li>
-                    <span class="author">
-                        <small>Posté par </small><a class="url" href="#"><?php echo $row[1]; ?></a> 
-                    </span>
-                </li>
-                <li>
-                    <span class="posted-in">
-                    <small>Le </small> <a href="#"><?php echo $row[3];?></a>
-                    </span>
-                </li>
-            </ul>
-        </div>
-    </header>
+    <div class="tbl-content">
+        <table class="confines">
+			<thead class="tbl-header">
+				<tr>
+				<th>ID</th>
+				<th>Nom</th>
+				<th>Prénom</th>
+				<th>CIN</th>
+				<th>Etat critique</th>
+				<th>Date de naissance </th>
+				<th>Date du test </th>
+				<th>Sysmptô mes</th>
+				<th>Remar ques </th>
+				<th>Localisation</th>
+				<th></th>
+				<th></th>
 
-    <div class="entry-content">
-        <p><?php echo $row[4]; ?></p>
+				</tr>
+			</thead>
+				<?php 
+					$servername = "localhost";
+					$username = "root";
+					$password = "MyNewPass";
+					$conn = new mysqli($servername, $username, $password);
+					if ($conn->connect_error) {
+						die("Connection failed: " . $conn->connect_error);
+					}
+					$req= "SELECT * FROM projetphp.confines;";
+					$result = $conn->query($req);
+					$id=0;
+					while($row = $result->fetch_assoc()):
+					$id++;
+				?>
+			<tbody>
+				<tr id="<?=$id?>">
+				<td><?= $row["id_c"]?></td>
+				<td><?= $row["nom_c"]?> </td>
+				<td><?= $row["prenom_c"]?></td>
+				<td><?= $row["cin_c"]?></td>
+				<td><?= $row["etat_c"]?></td>
+				<td><?= $row["date_naissance_c"]?></td>
+				<td><?= $row["date_test_c"]?></td>
+				<td><?= $row["symptome_c"]?></td>
+				<td><?= $row["remarques_c"]?></td>
+				<td> <a href="<?= $row["localisation"]?>" class="goto">↪</a> </td>
+				<td> <a href="modifier_confine.php?id=<?= $row["id_c"]?>">✎</a> </td>
+				<td> <a  onclick="Supprimer_confine(<?=$id?>)">✘</a> </td>
+
+				</tr>
+				
+			</tbody>
+				<?php endwhile;?>
+
+        </table>
     </div>
-</div>
+</section>
 
-        <br><br>
-
-        <div class="fac-accordion">
-            <?php 
-                $conn->next_result();
-                 if ($result = $conn->store_result()) 
-                while ( $row = $result->fetch_row()):
-            ?>
-				<div class="container">
-					<div class="accordion" id="accordion">
-						<div class="accordion-group">
-							<div class="accordion-heading">
-								<a class="accordion-toggle" data-toggle="collapse"  href="#collapse<?=$row[0] ?>">
-									<span id="user"> <?= $row[1] ?> </span>
-                                   
-								</a>
-							</div>
-							
-							<div id="collapse<?=$row[0] ?>" class="accordion-body collapse in">
-								<div class="accordion-inner">
-                                    <?= $row[2] ?> 
-                                    <span id="date" class="pull-right"> <?= $row[3] ?>    </span><br>
-                                    <a class="pull-right">Signaler </a>
-
-								</div>
-							</div><!-- /.accordion-group-->
-						</div><!-- /.accordion-group-->
-						                                      
-					</div>
-				</div>
-            <?php
-                endwhile;
-            ?>
-                
-        </div>
-            <?php
-                if(isset($_SESSION["name"])):
-            ?>
-        <div class="container" id="commentaire">
-            <form class="newsletter-form" method=post action="forum1.php?titre=<?=$titre?>">
-				<div class="form-group">
-					<label class="sr-only" for="InputEmail1">Votre commentaire</label>
-					<input type="text" class="form-control" name="new_comment" id="Comment1" placeholder="Your comment">
-					<button type="submit" class="btn">OK &nbsp;<i class="fa fa-angle-right"></i></button>
-			    </div>
-			</form>	
-		</div>		
-            <?php
-            endif;
-            if(isset($_POST["new_comment"])){
-                insert("0,'".$_SESSION["name"]."', '".$_POST["new_comment"]."' , sysdate(), ".$id, "forum_reponses");
-                unset($_POST);
-                header("refresh:0");
-                ob_end_flush();
-            }
-            ?>
-            
-            
-
-        <!-- fin forum  -->		
-			        
-			    <!-- copyright-section start -->
+								
+			        <!-- copyright-section start -->
 			        <footer class="copyright-section">
 			        	<div class="container text-center">
 			        		<div class="copyright-info">
@@ -340,8 +269,7 @@ include('config/functions.php');
 			        		</div>
 			        	</div><!-- /.container -->
 			        </footer>
-				<!-- copyright-section end -->
-			        
+			        <!-- copyright-section end -->
 				</div> <!-- .st-content -->
     		</div> <!-- .st-pusher -->
 

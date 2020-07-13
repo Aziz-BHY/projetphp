@@ -1,10 +1,5 @@
-<?php 
-ob_start();
+<?php
 session_start();
- if($_SESSION["type"] != "doctor"){
-    header('Location: index.php');
-}
-
 error_reporting(0);
 ?>
 <!DOCTYPE html>
@@ -42,8 +37,6 @@ error_reporting(0);
     	<link href="css/template.css" rel="stylesheet">
 	    <!-- Custom CSS -->
 	    <link href="css/style.css" rel="stylesheet">
-        <link href="css/tableau.css" rel="stylesheet">
-
 	    <!-- Responsive CSS -->
 	    <link href="css/responsive.css" rel="stylesheet">
 
@@ -54,20 +47,6 @@ error_reporting(0);
 		    <script src="js/vendor/html5shim.js"></script>
 		    <script src="js/vendor/respond.min.js"></script>
 	    <![endif]-->
-
-		<script language="javascript">
-		function Supprimer_confine(id){
-        var elm = document.getElementById(id);
-        var elms = elm.getElementsByTagName("td");
-        var xhttp;
-        xhttp = new XMLHttpRequest();
-        xhttp.open("GET", "supprimerConfine.php?id="+elms[0].innerHTML, true);
-        xhttp.send();
-        elm.parentNode.removeChild(elm);
-		}
-		</script>
-
-
 	</head>
 
 	
@@ -135,7 +114,41 @@ error_reporting(0);
                                         <li class="active"><a href="index.php">Acceuil <span class="fa "></span></a>
                                             
                                         </li>
+                                        <?php
+                                        if(!isset($_SESSION["type"])):
+                                        ?>
+                                        <li class="dropdown"><a href="#">S'identifier <span class="fa fa-angle-down"></span></a>
+                                            <div class="submenu-wrapper">
+                                                <div class="submenu-inner">
+                                                    <ul class="dropdown-menu">
+                                                    	<li><a href="espacemedecins.php">Espace Médecin </a></li>
+                                                        <li><a href="espace_visiteur.php">Espace visiteur</a></li>
+                                                        
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <?php
+                                        endif;
+                                        if($_SESSION["type"] == "visiteur"):
+                                        ?>
+                                         <li class="dropdown"><a href="#"> <?= $_SESSION["name"]?> <span class="fa fa-angle-down"></span></a>
+                                            <div class="submenu-wrapper">
+                                                <div class="submenu-inner">
+                                                    <ul class="dropdown-menu">
+                                                    	<li><a href="profile.php">Mon profile </a></li>
+                                                        <li><a href="deconnecter.php">Se déconnecter</a></li>
+                                                        
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>
                                         
+                                        
+                                        <?php
+                                        endif;
+                                        if($_SESSION["type"] == "doctor"):
+                                        ?>
                                          <li class="dropdown"><a href="#">Dr <?=$_SESSION["name"]?> <span class="fa fa-angle-down"></span></a>
                                             <div class="submenu-wrapper">
                                                 <div class="submenu-inner">
@@ -161,7 +174,9 @@ error_reporting(0);
                                             </div>
                                         </li>
                                         
-                                        
+                                        <?php
+                                        endif;
+                                        ?>
                                         <li class="dropdown"><a href="forum.php">Forum<span class="fa"></span></a>
                                             
                                         </li>
@@ -170,8 +185,7 @@ error_reporting(0);
                                         <li class="dropdown"><a href="statMAP.php">Statistiques  <span class="fa"></span></a>
 
 									</ul>
-								</div><!-- /.navbar-collapse -->	
-							  </div><!-- /.navbar-collapse -->
+								</div><!-- /.navbar-collapse -->
 						  </div><!-- /.container -->
 
 						  
@@ -184,84 +198,96 @@ error_reporting(0);
 								<div class="col-xs-12">
 									<div class="page-header-wrap">
 										<div class="page-header">
-									   		<h1>Gestion des confinés</h1>
-											
-                                        </div>
+									   		<h1>Forum & Questions</h1>
+									   	</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</section>
 					
-					<!--corps de la page-->
+					
+					 <section class="container">
+							<div class="container text-center">
+								<?php
+                                if(isset($_SESSION["name"])):
+                        
+                        ?>
+                                <br>
+									<a href="question.php" class="btn btn-primary quote-btn">Ajouter une question</a>
 
-<section class="container" >
-    <br>
-    <span class="haut">
-        <a class="blueButton" href="ajouter_confines.php">+ Ajouter un confiné </a> &nbsp 
-        <a class="blueButton" href="consulter_confines.php">Consulter un confiné </a>    
-    </span>
+                        <?php 
+                        else: ?>
+                           
+                  
+								<br> <h3 class="container"> Pour pouvoir ajouter un forum ou commenter il faut se connecter ! </h3><br>			
+								<a href="espacemedecins.php" class="btn btn-primary quote-btn">Espace Médecins</a>
+								<a href="espace_visiteur.php" class="btn btn-primary quote-btn">Espace visiteur</a>
+						
 
+                        <?php endif; ?>
+                         </div><!-- /.container -->
+						</section>
+                          
+                    <?php
+                     $servername = "localhost";
+                                $username = "root";
+                                $password = "MyNewPass";
+                                $conn = new mysqli($servername, $username, $password);
+                                if ($conn->connect_error) {
+                                    die("Connection failed: " . $conn->connect_error);
+                                }
+                        if(isset($_GET["searchfor"])){
+                            extract($_GET);
+                            $search = strip_tags($searchfor);
+                            $req= "SELECT * FROM projetphp.forum_sujets where titre like '%".$search."%';";
+                            echo "<h2> Searching for: ".$search."</h2>";
+                        }
+                    
+                    ?>
+					
 
-    <div class="tbl-content">
-        <table class="confines">
-			<thead class="tbl-header">
-				<tr>
-				<th>ID</th>
-				<th>Nom</th>
-				<th>Prénom</th>
-				<th>CIN</th>
-				<th>Etat critique</th>
-				<th>Date de naissance </th>
-				<th>Date du test </th>
-				<th>Sysmptô mes</th>
-				<th>Remar ques </th>
-				<th>Localisation</th>
-				<th></th>
-				<th></th>
-
-				</tr>
-			</thead>
-				<?php 
-					$servername = "localhost";
-					$username = "root";
-					$password = "MyNewPass";
-					$conn = new mysqli($servername, $username, $password);
-					if ($conn->connect_error) {
-						die("Connection failed: " . $conn->connect_error);
-					}
-					$req= "SELECT * FROM projetphp.confines;";
-					$result = $conn->query($req);
-					$id=0;
-					while($row = $result->fetch_assoc()):
-					$id++;
-				?>
-			<tbody>
-				<tr id="<?=$id?>">
-				<td><?= $row["id_c"]?></td>
-				<td><?= $row["nom_c"]?> </td>
-				<td><?= $row["prenom_c"]?></td>
-				<td><?= $row["cin_c"]?></td>
-				<td><?= $row["etat_c"]?></td>
-				<td><?= $row["date_naissance_c"]?></td>
-				<td><?= $row["date_test_c"]?></td>
-				<td><?= $row["symptome_c"]?></td>
-				<td><?= $row["remarques_c"]?></td>
-				<td> <a href="<?= $row["localisation"]?>" class="goto">↪</a> </td>
-				<td> <a href="modifier_confine.php?id=<?= $row["id_c"]?>">✎</a> </td>
-				<td> <a  onclick="Supprimer_confine(<?=$id?>)">✘</a> </td>
-
-				</tr>
-				
-			</tbody>
-				<?php endwhile;?>
-
-        </table>
-    </div>
-</section>
-
-								
-			        <!-- copyright-section start -->
+				<!--corps de la page-->
+		<section class="single-service-contents">
+		<!-- début forum les plus visités -->
+			<div class="fac-accordion">
+                <?php
+                              if(!isset($_GET["searchfor"])) 
+                                $req= "SELECT * FROM projetphp.forum_sujets;";
+                                $result = $conn->query($req);
+                                                    $id = 0;
+                                while($row = $result->fetch_assoc()):
+                    		?>
+                
+				<div class="container">
+					<div class="accordion" id="accordion">
+						<div class="accordion-group">
+							<div class="accordion-heading">
+								<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="<?php echo "#collapse".$id ?>">
+									<a href="forum1.php?titre=<?= $row["titre"]?>"><h3><?php echo $row["titre"] ?></h3> </a>
+									<span id="user"> <?= $row["auteur"] ?></span>
+									<span id="date" class="pull-right"> <?php echo $row["date_derniere_reponse"] ?></span>
+								</a>
+							</div>
+							
+							<div id="<?php echo "collapse".$id ?>" class="accordion-body collapse in">
+								<div class="accordion-inner">
+									<?php echo $row["contenu"] ?>
+								</div>
+							</div><!-- /.accordion-group-->
+						</div><!-- /.accordion-group-->
+						                                      
+					</div>
+				</div>
+                <?php
+                    $id++;
+                    endwhile;?>
+			
+			</div> <!-- fin forum les plus visités -->				
+				</section>
+			       
+			        
+			    <!-- copyright-section start -->
 			        <footer class="copyright-section">
 			        	<div class="container text-center">
 			        		<div class="copyright-info">
@@ -269,7 +295,8 @@ error_reporting(0);
 			        		</div>
 			        	</div><!-- /.container -->
 			        </footer>
-			        <!-- copyright-section end -->
+				<!-- copyright-section end -->
+			        
 				</div> <!-- .st-content -->
     		</div> <!-- .st-pusher -->
 

@@ -1,10 +1,19 @@
-<?php
+<?php 
+ob_start();
 session_start();
-error_reporting(0);
-if(!isset($_SESSION["name"])){
+ if(!isset($_SESSION["name"])){
     header('Location: index.php');
 }
+error_reporting(0);
+if(!isset($_GET['id'])){
+    header('Location: gestion_confines.php');
+}
+else{
+    extract($_GET);
+    $_Post['id'] = strip_tags($id);
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -40,6 +49,8 @@ if(!isset($_SESSION["name"])){
     	<link href="css/template.css" rel="stylesheet">
 	    <!-- Custom CSS -->
 	    <link href="css/style.css" rel="stylesheet">
+        <link href="css/tableau.css" rel="stylesheet">
+
 	    <!-- Responsive CSS -->
 	    <link href="css/responsive.css" rel="stylesheet">
 
@@ -50,11 +61,31 @@ if(!isset($_SESSION["name"])){
 		    <script src="js/vendor/html5shim.js"></script>
 		    <script src="js/vendor/respond.min.js"></script>
 	    <![endif]-->
+
+
 	</head>
 
 	
 
 	<body id="page-top">
+		<?php
+			include('config/functions.php');
+         $servername = "localhost";
+        $username = "root";
+        $password = "MyNewPass";
+        $conn = new mysqli($servername, $username, $password);
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+				if(isset($_POST["c_symptomes"]) and isset($_POST["c_remarques"])){
+					
+						 $req= "update projetphp.confines set symptome_c = '".$_POST["c_symptomes"]."' , remarques_c = '".$_POST["c_remarques"]."' , etat_c = '".$_POST["c_etat"]."'  where id_c =". $_POST["id"]." ;";
+                    echo $req;
+					$conn->query($req);		
+				
+            }
+			
+		?>
 		<div id="st-container" class="st-container">
     		<div class="st-pusher">
     			<div class="st-content">
@@ -117,27 +148,7 @@ if(!isset($_SESSION["name"])){
                                         <li class="active"><a href="index.php">Acceuil <span class="fa "></span></a>
                                             
                                         </li>
-                                       
-                                        <?php
-                                        if($_SESSION["type"] == "visiteur"):
-                                        ?>
-                                         <li class="dropdown"><a href="#"> <?= $_SESSION["name"]?> <span class="fa fa-angle-down"></span></a>
-                                            <div class="submenu-wrapper">
-                                                <div class="submenu-inner">
-                                                    <ul class="dropdown-menu">
-                                                    	<li><a href="profile.php">Mon profile </a></li>
-                                                        <li><a href="deconnecter.php">Se déconnecter</a></li>
-                                                        
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </li>
                                         
-                                        
-                                        <?php
-                                        endif;
-                                        if($_SESSION["type"] == "doctor"):
-                                        ?>
                                          <li class="dropdown"><a href="#">Dr <?=$_SESSION["name"]?> <span class="fa fa-angle-down"></span></a>
                                             <div class="submenu-wrapper">
                                                 <div class="submenu-inner">
@@ -163,9 +174,7 @@ if(!isset($_SESSION["name"])){
                                             </div>
                                         </li>
                                         
-                                        <?php
-                                        endif;
-                                        ?>
+                                        
                                         <li class="dropdown"><a href="forum.php">Forum<span class="fa"></span></a>
                                             
                                         </li>
@@ -175,6 +184,7 @@ if(!isset($_SESSION["name"])){
 
 									</ul>
 								</div><!-- /.navbar-collapse -->	
+							  </div><!-- /.navbar-collapse -->
 						  </div><!-- /.container -->
 
 						  
@@ -187,72 +197,58 @@ if(!isset($_SESSION["name"])){
 								<div class="col-xs-12">
 									<div class="page-header-wrap">
 										<div class="page-header">
-									   		<h1>Forum & Questions</h1>
-									   	</div>
-                                        <ol class="breadcrumb">
-                                            <li><a href="index.php">Acceuil</a></h2></li>
-                                              <li><a href="forum.php">Forum & questions</a></li>
-                                              <li class="active"><a href="question.php">Ajouter une question</a> </li>
-                                        </ol>
+									   		<h1>Modifier un confiné</h1>
+                                        </div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</section>
 					
+					<!--corps de la page-->
 
-				<!--corps de la page-->
-		<section class="single-service-contents container">
-            <!-- début  -->
-            <h2> Ajouter une question : </h2>
-            <form method=post action="question.php">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <label for="titre"> Titre</label>
-                                <input type="text" name="titre" class="form-control" id="titre" placeholder="">
-                        </div>
-                    </div> <!-- /.col -->
-                </div><!-- /.row -->
+<section class="container" >
+<br>
+                        <div class="row">       
+                            <form action="modifier_confine.php" method="POST">
+                                <input name="id" type="hidden" value="<?=$id?>">
 
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <label for="ques">Votre question</label>
-                            <textarea class="form-control" name="ques" rows="6" id="question" placeholder=""></textarea>
-                        </div>
-                    </div> <!-- /.col -->
-                </div><!-- /.row -->
-                <button type="submit" class="btn btn-primary">Confirmer</button>
-            </form>
-        </section>
-                
-        <!-- fin -->				
-        <?php
-                if(isset($_POST["titre"]) and isset($_POST["ques"])){
-                    $servername = "localhost";
-                    $username = "root";
-                    $password = "MyNewPass";
-                    $conn = new mysqli($servername, $username, $password);
-                    if ($conn->connect_error) {
-                        die("Connection failed: " . $conn->connect_error);
-                    }
-                    $req= "SELECT * FROM projetphp.forum_sujets where titre = '".$_POST["titre"]."';";
-                    $result = $conn->query($req);
-                    if($result->num_rows >= 1){
-                        echo "ce titre existe deja si vous voulez le voir visiter ce lien";
-                        echo "<a href='forum.php'> link here </a>";
-                    }else {
-                        $req = "insert into projetphp.forum_sujets (auteur, titre, date_derniere_reponse, contenu) values ('".$_SESSION["name"]."','".$_POST["titre"]."',sysdate(),'".$_POST["ques"]."')";
-                        $conn->query($req);
-                         header('Location: forum1.php?titre='.$_POST["titre"]);
-                          }
-                }
-            
-            ?>
-			       
-			        
-			    <!-- copyright-section start -->
+                                <div class="form-group">
+                                    <label for="c_symptomes"> Symptômes </label>
+                                    <textarea id="c_symptomes" name="c_symptomes" class="form-control" required="" placeholder=""></textarea>
+								</div>
+
+                                <div class="form-group">
+                                    <label for="c_etat"> Etat critique </label>
+                                    <ul class="listview">
+                                        <li>
+                                            <label>
+                                                <input name="c_etat" value="oui" checked=''  type="radio">
+                                                <span>Oui</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input name="c_etat" value="non"   type="radio">
+                                                <span>Non</span>
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="form-group">
+                                    <label for="c_remarques"> Remarques </label>
+                                    <textarea id="c_remarques" name="c_remarques" class="form-control" required="" placeholder=""></textarea>
+								</div>
+                                <br>
+                                <button type="submit" name="ajouter" class="btn btn-primary">Modifier</button>
+                                
+                            </form>
+						</div>
+                        <br>
+</section>
+
+								
+			        <!-- copyright-section start -->
 			        <footer class="copyright-section">
 			        	<div class="container text-center">
 			        		<div class="copyright-info">
@@ -260,8 +256,7 @@ if(!isset($_SESSION["name"])){
 			        		</div>
 			        	</div><!-- /.container -->
 			        </footer>
-				<!-- copyright-section end -->
-			        
+			        <!-- copyright-section end -->
 				</div> <!-- .st-content -->
     		</div> <!-- .st-pusher -->
 

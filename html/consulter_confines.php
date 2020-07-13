@@ -56,15 +56,14 @@ error_reporting(0);
 	    <![endif]-->
 
 		<script language="javascript">
-		function goto(){
-			var elem = document.getElementById("1");
-			elem.innerHTML = "";
-			<?php
-				echo "<h2>aziz</h2>";
-			?>
+		function supprimer(id){
+        var xhttp;
+        xhttp = new XMLHttpRequest();
+        xhttp.open("GET", "ajax/supprimerConfine.php?id="+id, true);
+        xhttp.send();
+		setTimeout(() => {   window.location.href = "gestion_confines.php"; }, 500);
 		}
 		</script>
-
 
 	</head>
 
@@ -270,13 +269,14 @@ error_reporting(0);
 						
 
         </h3>
+        <a href="" class="Positif" onclick="supprimer( <?= $row["id_c"]?> )"> Supprimer le confiné </a>
+		<a href="modifier_confine.php?id=<?= $row["id_c"] ?>" class="Negatif"> Modifier la fiche </a>
+
 		<?php
 			endwhile;
 			endif;
 		?>
-		<a href="#" class="Positif"> Supprimer le confiné </a>
-		<a href="#" class="Negatif"> Modifier la fiche </a>
-
+		
     </div>
 	<br>
 </section>

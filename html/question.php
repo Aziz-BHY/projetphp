@@ -1,22 +1,25 @@
 <?php
+ob_start();
 session_start();
 error_reporting(0);
-
+if(!isset($_SESSION["name"])){
+    header('Location: index.php');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>Covido</title>
-    <meta charset="utf-8">
+
+	<head>
+	    <meta charset="utf-8">
 	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	    <meta name="viewport" content="width=device-width, initial-scale=1">
 	    <meta name="description" content="">
 	    <meta name="author" content="">
 
-	    <!-- Web Fonts -->
+	    <title>COVIDO</title>
+	   	<!-- Web Fonts -->
         <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900,200italic,300italic,400italic,600italic,700italic,900italic' rel='stylesheet' type='text/css'>
-        <!-- Bootstrap Core CSS -->
+	    <!-- Bootstrap Core CSS -->
 	    <link href="css/bootstrap.min.css" rel="stylesheet">
 	    <!-- Flaticon CSS -->
 	    <link href="fonts/flaticon/flaticon.css" rel="stylesheet">
@@ -42,83 +45,18 @@ error_reporting(0);
 	    <link href="css/responsive.css" rel="stylesheet">
 
 	    <script src="js/vendor/modernizr-2.8.1.min.js"></script>
+	    <!-- HTML5 Shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	    <!--[if lt IE 9]>
+		    <script src="js/vendor/html5shim.js"></script>
+		    <script src="js/vendor/respond.min.js"></script>
+	    <![endif]-->
+	</head>
 
-    <script src="map/mapdata.js"></script>
-    <script src="map/countrymap.js"></script>
-      <script>
-      function verify(){
-          var elm = document.getElementById("map");
-          var e = elm.getElementsByTagName("path");
-          var la = document.getElementById("lable");
-          var Tozeur = elm.getElementsByClassName("sm_state_TUN101");
-          var Manubah = elm.getElementsByClassName("sm_state_TUN102");
-          var Béja = elm.getElementsByClassName("sm_state_TUN103");
-          var Ben_Arous = elm.getElementsByClassName("sm_state_TUN104");
-          var Bizerte = elm.getElementsByClassName("sm_state_TUN105");
-          var Jendouba = elm.getElementsByClassName("sm_state_TUN106");
-          var Nabeul = elm.getElementsByClassName("sm_state_TUN107");
-          var Tunis = elm.getElementsByClassName("sm_state_TUN108");
-          var Le_Kef = elm.getElementsByClassName("sm_state_TUN109");
-          var Kassérine = elm.getElementsByClassName("sm_state_TUN110");
-          var Gabès = elm.getElementsByClassName("sm_state_TUN111");
-          var Gafsa = elm.getElementsByClassName("sm_state_TUN112");
-          var Sidi_Bou_Zid = elm.getElementsByClassName("sm_state_TUN113");
-          var Sfax = elm.getElementsByClassName("sm_state_TUN114");
-          var Siliana = elm.getElementsByClassName("sm_state_TUN115");
-          var Mahdia = elm.getElementsByClassName("sm_state_TUN116");
-          var Monastir = elm.getElementsByClassName("sm_state_TUN117");
-          var Kairouan = elm.getElementsByClassName("sm_state_TUN118");
-          var Sousse = elm.getElementsByClassName("sm_state_TUN119");
-          var Zaghouan = elm.getElementsByClassName("sm_state_TUN120");
-          var Médenine = elm.getElementsByClassName("sm_state_TUN96");
-          var Kebili = elm.getElementsByClassName("sm_state_TUN97");
-          var Tataouine = elm.getElementsByClassName("sm_state_TUN98");
-          Tozeur[0].onclick = function(){
-              loadRegion("tozeur");
-          };
-          Manubah[0].onclick = function(){loadRegion("Manubah");};
-          Béja[0].onclick = function(){loadRegion("Beja");};
-          Ben_Arous[0].onclick = function(){loadRegion("Ben_Arous");};
-          Bizerte[0].onclick = function(){loadRegion("Bizerte");};
-          Jendouba[0].onclick = function(){loadRegion("Jendouba");};
-          Nabeul[0].onclick = function(){loadRegion("Nabeul");};
-          Tunis[0].onclick = function(){loadRegion("Tunis");};
-          Le_Kef[0].onclick = function(){loadRegion("Kef");};
-          Kassérine[0].onclick = function(){loadRegion("Kasserine");};
-          Gabès[0].onclick = function(){loadRegion("Gabes");};
-          Gafsa[0].onclick = function(){loadRegion("Gafsa");};
-          Sidi_Bou_Zid[0].onclick = function(){loadRegion("Sidi_Bou_Zid");};
-          Sfax[0].onclick = function(){loadRegion("Sfax");};
-          Siliana[0].onclick = function(){loadRegion("Siliana");};
-          Mahdia[0].onclick = function(){loadRegion("Mahdia");};
-          Monastir[0].onclick = function(){loadRegion("Monastir");};
-          Kairouan[0].onclick = function(){loadRegion("Kairouan");};
-          Sousse[0].onclick = function(){loadRegion("Sousse");};
-          Zaghouan[0].onclick = function(){loadRegion("Zaghouan");};
-          Médenine[0].onclick = function(){loadRegion("Medenine");};
-          Kebili[0].onclick = function(){loadRegion("Kebili");};
-          Tataouine[0].onclick = function(){loadRegion("Tataouine");};
-                
-          
-      }
-          function loadRegion(nameRegion){
-              document.getElementById("lable").innerHTML = "waiting";
-              var xhttp = new XMLHttpRequest();
-              xhttp.onreadystatechange = function(){
-                  if(this.readyState == 4 && this.status == 200){
-                      document.getElementById("lable").innerHTML = this.responseText;
-                  }
-              };
-              xhttp.open("GET", "Region.php?q="+nameRegion , true);
-              xhttp.send();
-          }
-      
-      </script>
-  </head>
+	
 
-  <body onload="verify()" id="page-top">
-
-  <div id="st-container" class="st-container">
+	<body id="page-top">
+		<div id="st-container" class="st-container">
     		<div class="st-pusher">
     			<div class="st-content">
 					<header class="header">
@@ -180,22 +118,8 @@ error_reporting(0);
                                         <li class="active"><a href="index.php">Acceuil <span class="fa "></span></a>
                                             
                                         </li>
+                                       
                                         <?php
-                                        if(!isset($_SESSION["type"])):
-                                        ?>
-                                        <li class="dropdown"><a href="#">S'identifier <span class="fa fa-angle-down"></span></a>
-                                            <div class="submenu-wrapper">
-                                                <div class="submenu-inner">
-                                                    <ul class="dropdown-menu">
-                                                    	<li><a href="espacemedecins.php">Espace Médecin </a></li>
-                                                        <li><a href="espace_visiteur.php">Espace visiteur</a></li>
-                                                        
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <?php
-                                        endif;
                                         if($_SESSION["type"] == "visiteur"):
                                         ?>
                                          <li class="dropdown"><a href="#"> <?= $_SESSION["name"]?> <span class="fa fa-angle-down"></span></a>
@@ -251,7 +175,7 @@ error_reporting(0);
                                         <li class="dropdown"><a href="statMAP.php">Statistiques  <span class="fa"></span></a>
 
 									</ul>
-								</div><!-- /.navbar-collapse -->				
+								</div><!-- /.navbar-collapse -->	
 						  </div><!-- /.container -->
 
 						  
@@ -264,29 +188,72 @@ error_reporting(0);
 								<div class="col-xs-12">
 									<div class="page-header-wrap">
 										<div class="page-header">
-									   		<h1>Statistiques en Tunisie</h1>
-                                        </div>
+									   		<h1>Forum & Questions</h1>
+									   	</div>
+                                        <ol class="breadcrumb">
+                                            <li><a href="index.php">Acceuil</a></h2></li>
+                                              <li><a href="forum.php">Forum & questions</a></li>
+                                              <li class="active"><a href="question.php">Ajouter une question</a> </li>
+                                        </ol>
 									</div>
 								</div>
 							</div>
 						</div>
 					</section>
 					
-					<!--corps de la page-->
-                    <section class="annual-report-section">
-                        <div class="container">	
-                            <div class="row">
-                                    <div id="map" class="pull-left"></div>
-                                    <br><br><br>
-                                    <h3><lable id="lable" > </lable><h3>
-                
-                                    <div class="map__liste"> </div>
-                            </div>
+
+				<!--corps de la page-->
+		<section class="single-service-contents container">
+            <!-- début  -->
+            <h2> Ajouter une question : </h2>
+            <form method=post action="question.php">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label for="titre"> Titre</label>
+                                <input type="text" name="titre" class="form-control" id="titre" placeholder="">
                         </div>
-	
-                    </section>  
-								
-			        <!-- copyright-section start -->
+                    </div> <!-- /.col -->
+                </div><!-- /.row -->
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label for="ques">Votre question</label>
+                            <textarea class="form-control" name="ques" rows="6" id="question" placeholder=""></textarea>
+                        </div>
+                    </div> <!-- /.col -->
+                </div><!-- /.row -->
+                <button type="submit" class="btn btn-primary">Confirmer</button>
+            </form>
+        </section>
+                
+        <!-- fin -->				
+        <?php
+                if(isset($_POST["titre"]) and isset($_POST["ques"])){
+                    $servername = "localhost";
+                    $username = "root";
+                    $password = "MyNewPass";
+                    $conn = new mysqli($servername, $username, $password);
+                    if ($conn->connect_error) {
+                        die("Connection failed: " . $conn->connect_error);
+                    }
+                    $req= "SELECT * FROM projetphp.forum_sujets where titre = '".$_POST["titre"]."';";
+                    $result = $conn->query($req);
+                    if($result->num_rows >= 1){
+                        echo "ce titre existe deja si vous voulez le voir visiter ce lien";
+                        echo "<a href='forum1.php?titre=".$_POST["titre"]."'> link here </a>";
+                    }else {
+                        $req = "insert into projetphp.forum_sujets (auteur, titre, date_derniere_reponse, contenu) values ('".$_SESSION["name"]."','".$_POST["titre"]."',sysdate(),'".$_POST["ques"]."')";
+                        $conn->query($req);
+                         header('Location: forum1.php?titre='.$_POST["titre"]);
+                          }
+                }
+            
+            ?>
+			       
+			        
+			    <!-- copyright-section start -->
 			        <footer class="copyright-section">
 			        	<div class="container text-center">
 			        		<div class="copyright-info">
@@ -294,7 +261,8 @@ error_reporting(0);
 			        		</div>
 			        	</div><!-- /.container -->
 			        </footer>
-			        <!-- copyright-section end -->
+				<!-- copyright-section end -->
+			        
 				</div> <!-- .st-content -->
     		</div> <!-- .st-pusher -->
 

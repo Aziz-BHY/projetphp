@@ -32,7 +32,7 @@ if(!isset($_SESSION["admin_name"])){
             var input2 = td[2].getElementsByTagName("input")[0].value;
             var input3 = td[3].getElementsByTagName("input")[0].value;
             xhttp = new XMLHttpRequest();
-            xhttp.open("GET", "update_region.php?reg="+region+"&nbmal="+input1+"&nbmo="+input2+"&nbgue="+input3, true);
+            xhttp.open("GET", "ajax/update_region.php?reg="+region+"&nbmal="+input1+"&nbmo="+input2+"&nbgue="+input3, true);
             xhttp.send();
         }
         window.location.href = "statistiques.php";
@@ -47,7 +47,9 @@ if(!isset($_SESSION["admin_name"])){
   <li><a href="indexAdmin.php">Acceuil</a></li>
   <li><a href="docteurs.php">Docteurs en attente</a></li>
   <li><a href="forum_admin.php">Forum</a></li>
-  <li><a href="statistiques.php">stats</a></li>
+  <li><a href="statistiques.php">Statistiques</a></li>
+  <li><a href="deconnecter.php">Se déconnecter</a></li>
+
 </ul>
 
 <section>

@@ -259,7 +259,7 @@ if ($result->num_rows == 1){
                                     if(isset($_POST["ancien"]) && isset($_POST["nouveau"]) && isset($_POST["repeter"])){
                                         if($_POST["ancien"] == $row["password"]){
                                             if($_POST["nouveau"] == $_POST["repeter"]){
-                                                header('Location: mdp.php?nouveau='.$_POST["nouveau"]);
+                                                header('Location: ajax/mdp.php?nouveau='.$_POST["nouveau"]);
                                             }
                                             else
                                             $erreur = "veuillez entrer le même mot de passe 2 fois ";

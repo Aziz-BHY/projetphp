@@ -9,12 +9,14 @@ if(!isset($_SESSION["admin_name"])){
 
 
 if(!isset($_GET['titre'])){
-        header('Location: index.php');
+        header('Location: indexadmin.php');
     }
     else{
         extract($_GET);
         $titre = strip_tags($titre);
-    }?>
+    }
+?>
+
 <html>
 <head>
 		<meta charset="utf-8">
@@ -45,11 +47,11 @@ if(!isset($_GET['titre'])){
 
 	    <!-- Custom CSS -->
 	    <link href="css/style.css" rel="stylesheet">
+        <link href="css/template.css" rel="stylesheet">
+
 	    <!-- Responsive CSS -->
 	    <link href="css/responsive.css" rel="stylesheet">
-        <link href="admin_style.css" rel="stylesheet">
-
-
+        <link href="admin.css" rel="stylesheet">
 
 	    <script src="js/vendor/modernizr-2.8.1.min.js"></script>
         <script>
@@ -64,7 +66,7 @@ if(!isset($_GET['titre'])){
                 elm = document.getElementById(id);
                  var xhttp;
                 xhttp = new XMLHttpRequest();
-                xhttp.open("GET", "delete_reponse.php?id="+id, true);
+                xhttp.open("GET", "ajax/delete_reponse.php?id="+id, true);
                 xhttp.send();
                 elm.parentNode.removeChild(elm);
 
@@ -72,13 +74,14 @@ if(!isset($_GET['titre'])){
     </script>
 </head>
 
-<body>
+<body style="color:#fff" >
 
 <ul class="sidenav">
   <li><a href="indexAdmin.php">Acceuil</a></li>
   <li><a href="docteurs.php">Docteurs en attente</a></li>
   <li><a href="forum_admin.php">Forum</a></li>
-  <li><a href="statistiques.php">stats</a></li>
+  <li><a href="statistiques.php">Statistiques</a></li>
+  <li><a href="deconnecter.php">Se déconnecter</a></li>
 </ul>
       <?php
                 $conn = connect();
@@ -91,7 +94,7 @@ if(!isset($_GET['titre'])){
                  $row = $result->fetch_row();
             $id = $row[0];
             ?>
-<div class="container">
+<div class="container" >
     <header class="entry-header clearfix">        
         <h2 class="entry-title"><a href="#" rel=""><?php echo $row[2]; ?></a></h2>
         <div class="entry-meta">
